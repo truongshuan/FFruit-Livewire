@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,6 +21,10 @@ class Post extends Model
         'topic_id',
     ];
 
+    /**
+     * Summary of topic
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function topic()
     {
         return $this->belongsTo(Topic::class, 'topic_id');
@@ -41,6 +44,12 @@ class Post extends Model
         ];
     }
 
+    /**
+     * Summary of scopeSearch
+     * @param mixed $query
+     * @param mixed $term
+     * @return void
+     */
     public function scopeSearch($query, $term): void
     {
         $term = "%$term%";

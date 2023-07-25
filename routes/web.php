@@ -13,6 +13,7 @@ use App\Http\Livewire\Admin\Topics\Topics;
 use App\Http\Livewire\Admin\Topics\AddTopic;
 use App\Http\Livewire\Admin\Topics\EditTopic;
 use App\Http\Livewire\Admin\Customers\Customers;
+use App\Http\Livewire\Admin\Orders\OrderDetail;
 use App\Http\Livewire\Admin\Orders\Orders;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +33,10 @@ Route::prefix('dashboard')->group(function () {
         return view('admin.pages.index');
     });
     Route::get('/customers', Customers::class)->name('customers');
-    Route::get('/orders', Orders::class)->name('orders');
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('/', Orders::class)->name('orders');
+        Route::get('/detail/{id?}', OrderDetail::class)->name('orderDetail');
+    });
     Route::group(['prefix' => 'categories'], function () {
         Route::get('/', Categories::class)->name('categories');
         Route::get('/add', AddCategory::class)->name('addCategory');

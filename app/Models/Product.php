@@ -12,6 +12,10 @@ class Product extends Model
     use HasFactory;
     use Sluggable;
 
+    /**
+     * Summary of table
+     * @var string
+     */
     protected $table = 'products';
 
     protected $fillable = [
@@ -38,11 +42,31 @@ class Product extends Model
         ];
     }
 
+    /**
+     * Relationship many-to-one with categories table
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    /**
+     * Relationship one-to-many with order detail table
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    /**
+     * Research by name
+     * @param mixed $query
+     * @param mixed $term
+     *
+     * @return void
+     */
     public function scopeSearch($query, $term): void
     {
         $term = "%$term%";
@@ -54,6 +78,10 @@ class Product extends Model
         });
     }
 
+    /**
+     * Get thumbnail url
+     * @return string|null
+     */
     public function getImageUrl()
     {
         if ($this->path_image) {

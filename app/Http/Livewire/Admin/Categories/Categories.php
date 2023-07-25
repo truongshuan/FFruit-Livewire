@@ -6,7 +6,6 @@ use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
 use App\Exports\CategoryExport;
-use Illuminate\Routing\UrlGenerator;
 
 class Categories extends Component
 {

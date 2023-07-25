@@ -40,6 +40,7 @@ class PostExport implements FromCollection, WithHeadings, WithColumnFormatting, 
             'F' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
+
     /**
      * @return \Illuminate\Support\Collection
      */
@@ -56,9 +57,11 @@ class PostExport implements FromCollection, WithHeadings, WithColumnFormatting, 
             ];
         }));
     }
+
+
     /**
-     * Styling cell 
-     * 
+     * Styling cell
+     *
      * @return array
      */
     public function registerEvents(): array

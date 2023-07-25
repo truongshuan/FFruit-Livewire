@@ -10,7 +10,6 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
-
     protected $fillable = [
         'title',
         'slug',
@@ -19,7 +18,8 @@ class Category extends Model
     ];
 
     /**
-     * @return [type]
+     * Summary of products
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function products()
     {

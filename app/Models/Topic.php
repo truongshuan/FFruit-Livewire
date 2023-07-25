@@ -39,6 +39,12 @@ class Topic extends Model
             ]
         ];
     }
+    /**
+     * Summary of scopeSearch
+     * @param mixed $query
+     * @param mixed $term
+     * @return void
+     */
     public function scopeSearch($query, $term): void
     {
         $term = "%$term%";

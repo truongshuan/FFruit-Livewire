@@ -1,3 +1,4 @@
+@section('title', 'Edit Topic')
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Sửa chủ đề </h1>

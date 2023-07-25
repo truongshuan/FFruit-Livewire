@@ -1,3 +1,4 @@
+@section('title', 'Add Topic')
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Thêm mới</h1>

@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->text(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'category_id' => Category::all()->random()->id,
+            'category_id' => Category::all('id')->random(),
         ];
     }
 }

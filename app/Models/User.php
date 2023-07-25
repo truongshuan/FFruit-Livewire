@@ -42,4 +42,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Relationship one-to-many with orders table
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * @param mixed $query
+     * @param mixed $term
+     *
+     * @return void
+     */
+    public function scopeSearch($query, $term): void
+    {
+        $term = "%$term%";
+        $query->where(function ($query) use ($term) {
+            $query->where('name', 'like', $term);
+            $query->orWhere('email', 'like', $term);
+        });
+    }
 }

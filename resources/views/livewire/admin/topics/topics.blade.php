@@ -1,3 +1,4 @@
+@section('title', 'Topics')
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Chủ đề bài viết</h1>
