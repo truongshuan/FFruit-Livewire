@@ -24,6 +24,10 @@ class AddRole extends Component
         $this->validateOnly($fields, $this->rules);
     }
 
+    /**
+     * Summary of store
+     * @return void
+     */
     public function store()
     {
         $validatedData = $this->validate();
@@ -35,6 +39,10 @@ class AddRole extends Component
         $this->dispatchBrowserEvent('added');
     }
 
+    /**
+     * Summary of render
+     * @return mixed
+     */
     public function render()
     {
         $permissions = Permission::all();

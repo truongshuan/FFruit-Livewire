@@ -80,6 +80,10 @@ class Orders extends Component
         return (new OrderExport($this->selectedRow))->download('Orders.xlsx');
     }
 
+    /**
+     * Summary of getOrders
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function getOrders()
     {
         return

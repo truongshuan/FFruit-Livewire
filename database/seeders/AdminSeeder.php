@@ -24,7 +24,7 @@ class AdminSeeder extends Seeder
             'remember_token' => Str::random(10),
             'email_verified_at' => now(),
         ]);
-        $role = Role::create(['name' => 'Admin']);
+        $role = Role::create(['name' => 'Super Admin']);
 
         $permissions = Permission::pluck('id', 'id')->all();
 

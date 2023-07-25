@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Permutations;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,8 @@ class DatabaseSeeder extends Seeder
             TopicSeeder::class,
             PostSeeder::class,
             OrderSeeder::class,
+            PermissionTableSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }
