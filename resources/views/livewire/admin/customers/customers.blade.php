@@ -34,76 +34,81 @@
                                 class="btn btn-success btn-sm d-block me-3">Export</button>
                         </div>
                         <!-- Default Table -->
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <div class="form-check">
-                                            <input wire:model='selectedPageRow' value="" class="form-check-input"
-                                                type="checkbox" id="checkAll">
-                                        </div>
-                                    </th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">
-                                        Họ tên
-                                        <a href="#" wire:click="sortBy('name')">
-                                            <i
-                                                class=" {{ $sortColumnName === 'name' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
-                                            <i
-                                                class=" {{ $sortColumnName === 'name' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
-                                        </a>
-                                    </th>
-                                    <th scope="col">Email</th>
-                                    {{-- <th scope="col">Số điện thoại</th> --}}
-                                    <th scope="col">Vai trò</th>
-                                    <th scope="col">Ngày đăng ký
-                                        <a href="#" wire:click="sortBy('created_at')">
-                                            <i
-                                                class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
-                                            <i
-                                                class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
-                                        </a>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($customers as $customer)
-                                <tr>
-                                    <th scope="row">
-                                        <div class="form-check">
-                                            <input wire:model='selectedRow' value="{{ $customer-> id}}"
-                                                class="form-check-input" type="checkbox" id="{{ $customer-> id}}">
-                                            <label class="form-check-label" for="{{ $customer-> id}}">
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th scope="row">
-                                        {{ $customer->id}}
-                                    </th>
-                                    <td>{{ $customer->name}}</td>
-                                    <td>{{ $customer->email}}</td>
-                                    {{-- <td>{{ $customer->id}}</td> --}}
-                                    <td>
-                                        Admin
-                                        {{-- <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked="">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
-                                        </div> --}}
-                                    </td>
-                                    <td>
-                                        {{ $customer->created_at->format('d/m/Y') }}
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <th colspan="7">
-                                        Không tìm thấy dữ liệu
-                                    </th>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            <div class="form-check">
+                                                <input wire:model='selectedPageRow' value="" class="form-check-input"
+                                                    type="checkbox" id="checkAll">
+                                            </div>
+                                        </th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">
+                                            Họ tên
+                                            <a href="#" wire:click="sortBy('name')">
+                                                <i
+                                                    class=" {{ $sortColumnName === 'name' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                <i
+                                                    class=" {{ $sortColumnName === 'name' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Vai trò</th>
+                                        <th scope="col">Ngày đăng ký
+                                            <a href="#" wire:click="sortBy('created_at')">
+                                                <i
+                                                    class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                <i
+                                                    class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">Phân quyền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($customers as $customer)
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="form-check">
+                                                <input wire:model='selectedRow' value="{{ $customer-> id}}"
+                                                    class="form-check-input" type="checkbox" id="{{ $customer-> id}}">
+                                                <label class="form-check-label" for="{{ $customer-> id}}">
+                                                </label>
+                                            </div>
+                                        </th>
+                                        <th scope="row">
+                                            {{ $customer->id}}
+                                        </th>
+                                        <td>{{ $customer->name}}</td>
+                                        <td>{{ $customer->email}}</td>
+                                        <td>
+                                            @if(!empty($customer->getRoleNames()))
+                                            @foreach($customer->getRoleNames() as $v)
+                                            <p>{{ $v }}</p>
+                                            @endforeach
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $customer->created_at->format('d/m/Y') }}
+                                        </td>
+                                        <th>
+                                            <a class="btn btn-primary"
+                                                href="{{ route('editCustomer', ['id'=> $customer->id]) }}">
+                                                Thêm quyền </a>
+                                        </th>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <th colspan="7">
+                                            Không tìm thấy dữ liệu
+                                        </th>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="text-center mt-3 mb-4">
                             {{ $customers->links() }}
                         </div>

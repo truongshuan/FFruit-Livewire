@@ -23,7 +23,10 @@ class OrderDetailFactory extends Factory
                 return Product::factory()->create()->id;
             },
             'quantity' => $this->faker->numberBetween(1, 10),
-            'price' => $this->faker->numberBetween(10000, 100000),
+            'price' => function (array $attributes) {
+                $product = Product::find($attributes['product_id']);
+                return $product->price;
+            },
         ];
     }
 }

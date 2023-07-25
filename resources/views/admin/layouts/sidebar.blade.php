@@ -41,6 +41,23 @@
             </ul>
         </li><!-- End Components Nav -->
         <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#role-nav" data-bs-toggle="collapse" href="#">
+                <span>Quyền & Vai trò</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="role-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('roles') }}">
+                        <span>Danh sách</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('addRole') }}">
+                        <span>Thêm mới</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Components Nav -->
+        <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
                 <span>Khách hàng</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>

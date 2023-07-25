@@ -50,111 +50,113 @@
                             </div>
                         </div>
                         <!-- Default Table -->
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <div class="form-check">
-                                            <input wire:model='selectedPageRow' class="form-check-input" type="checkbox"
-                                                id="gridCheck1">
-                                            <label class="form-check-label" for="gridCheck1">
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">
-                                        Tên
-                                        <span>
-                                            <a href="#" wire:click="sortBy('name')">
-                                                <i
-                                                    class=" {{ $sortColumnName === 'name' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
-                                                <i
-                                                    class=" {{ $sortColumnName === 'name' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
-                                            </a>
-                                        </span>
-                                    </th>
-                                    <th scope="col">
-                                        Danh mục
-                                    </th>
-                                    <th scope="col">Hình ảnh
-                                    </th>
-                                    <th scope="col">Đơn giá
-                                        <span>
-                                            <a href="#" wire:click="sortBy('price')">
-                                                <i
-                                                    class=" {{ $sortColumnName === 'price' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
-                                                <i
-                                                    class=" {{ $sortColumnName === 'price' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
-                                            </a>
-                                        </span>
-                                    </th>
-                                    <th scope="col">Giá khuyến mãi
-                                        <span>
-                                            <a href="#" wire:click="sortBy('sale_price')">
-                                                <i
-                                                    class=" {{ $sortColumnName === 'sale_price' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
-                                                <i
-                                                    class=" {{ $sortColumnName === 'sale_price' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
-                                            </a>
-                                        </span>
-                                    </th>
-                                    <th scope="col">Mô tả</th>
-                                    <th scope="col">Ngày tạo
-                                        <span>
-                                            <a href="#" wire:click="sortBy('created_at')">
-                                                <i
-                                                    class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
-                                                <i
-                                                    class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
-                                            </a>
-                                        </span>
-                                    </th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($products as $product)
-                                <tr>
-                                    <th scope="row">
-                                        <div class="form-check">
-                                            <input wire:model='selectedRow' value="{{ $product->id}}"
-                                                class="form-check-input" type="checkbox" id="{{ $product->id }}">
-                                            <label class="form-check-label" for="{{ $product->id }}">
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th scope="row">{{ $product->id }}</th>
-                                    <td>{{ $product->name }}</td>
-                                    <td>{{ $product->category ? $product->category['title'] : '-' }}</td>
-                                    <th scope="row">
-                                        <img src="{{ $product->getImageUrl() }}" alt="{{ $product->name}}"
-                                            class="rounded" width="100px">
-                                    </th>
-                                    <td>{{ number_format($product->price, 0, '.', ',') }} đ</td>
-                                    <td>{{ number_format($product->sale_price, 0, '.', ',') }} đ</td>
-                                    <td>
-                                        {!! $product->description !!}
-                                    </td>
-                                    <td>{{ $product->created_at->format('d/m/Y') }}</td>
-                                    <td>
-                                        <a href="{{ route('editProduct', ['id'=>$product->id]) }}"
-                                            class="btn btn-secondary btn-sm">Sửa</a>
-                                        <button wire:click.prevent='deleteConfirm({{ $product->id }})'
-                                            class="btn btn-danger btn-sm">Xóa</button>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr scope="row">
-                                    <th colspan="9">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center">Không có dữ liệu !</h5>
+                        <div class="table-responsive">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            <div class="form-check">
+                                                <input wire:model='selectedPageRow' class="form-check-input"
+                                                    type="checkbox" id="gridCheck1">
+                                                <label class="form-check-label" for="gridCheck1">
+                                                </label>
                                             </div>
-                                    </th>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                        </th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">
+                                            Tên
+                                            <span>
+                                                <a href="#" wire:click="sortBy('name')">
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'name' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'name' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                                </a>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            Danh mục
+                                        </th>
+                                        <th scope="col">Hình ảnh
+                                        </th>
+                                        <th scope="col">Đơn giá
+                                            <span>
+                                                <a href="#" wire:click="sortBy('price')">
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'price' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'price' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                                </a>
+                                            </span>
+                                        </th>
+                                        <th scope="col">Giá khuyến mãi
+                                            <span>
+                                                <a href="#" wire:click="sortBy('sale_price')">
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'sale_price' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'sale_price' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                                </a>
+                                            </span>
+                                        </th>
+                                        <th scope="col">Mô tả</th>
+                                        <th scope="col">Ngày tạo
+                                            <span>
+                                                <a href="#" wire:click="sortBy('created_at')">
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                    <i
+                                                        class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                                </a>
+                                            </span>
+                                        </th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($products as $product)
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="form-check">
+                                                <input wire:model='selectedRow' value="{{ $product->id}}"
+                                                    class="form-check-input" type="checkbox" id="{{ $product->id }}">
+                                                <label class="form-check-label" for="{{ $product->id }}">
+                                                </label>
+                                            </div>
+                                        </th>
+                                        <th scope="row">{{ $product->id }}</th>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->category ? $product->category['title'] : '-' }}</td>
+                                        <th scope="row">
+                                            <img src="{{ $product->getImageUrl() }}" alt="{{ $product->name}}"
+                                                class="rounded" width="100px">
+                                        </th>
+                                        <td>{{ number_format($product->price, 0, '.', ',') }} đ</td>
+                                        <td>{{ number_format($product->sale_price, 0, '.', ',') }} đ</td>
+                                        <td>
+                                            {!! $product->description !!}
+                                        </td>
+                                        <td>{{ $product->created_at->format('d/m/Y') }}</td>
+                                        <td>
+                                            <a href="{{ route('editProduct', ['id'=>$product->id]) }}"
+                                                class="btn btn-secondary btn-sm">Sửa</a>
+                                            <button wire:click.prevent='deleteConfirm({{ $product->id }})'
+                                                class="btn btn-danger btn-sm">Xóa</button>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr scope="row">
+                                        <th colspan="9">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center">Không có dữ liệu !</h5>
+                                                </div>
+                                        </th>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="text-center mt-3 mb-4">
                             {{ $products->links() }}
                         </div>

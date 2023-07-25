@@ -7,8 +7,11 @@ use Livewire\Component;
 
 class OrderDetail extends Component
 {
+    public $perPage = 5;
     public $selectedRow = [];
     public $selectedPageRow = false;
+    public $sortColumnName =  'id';
+    public $sortDirection = 'asc';
     public $order_id;
 
     /**
@@ -21,6 +24,30 @@ class OrderDetail extends Component
         $this->order_id = $id;
     }
 
+
+    /**
+     * Function into swap sortdirection
+     * @return string
+     */
+    public function swapSortDirection(): string
+    {
+        return $this->sortDirection === 'asc' ? 'desc' : 'asc';
+    }
+    /**
+     * Function sort data
+     * @param mixed $columnName
+     *
+     * @return void
+     */
+    public function sortBy($columnName): void
+    {
+        if ($this->sortColumnName === $columnName) {
+            $this->sortDirection = $this->swapSortDirection();
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumnName = $columnName;
+    }
 
     /**
      * Selected rows data
@@ -51,13 +78,20 @@ class OrderDetail extends Component
                 $query->select('id', 'title');
             }])
             ->select('id', 'order_id', 'product_id', 'quantity', 'price')
-            ->get();
+            ->orderBy($this->sortColumnName, $this->sortDirection)
+            ->paginate($this->perPage);
     }
 
+    /**
+     * render
+     *
+     * @return void
+     */
     public function render()
     {
         $id = $this->order_id;
         $order_detail = $this->getProductOrder();
+
         return view('livewire.admin.orders.order-detail', ['id' => $id, 'orderDetail' => $order_detail])->layout('livewire.admin.layouts.base');
     }
 }

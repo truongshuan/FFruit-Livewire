@@ -34,7 +34,7 @@ class CustomerExport implements FromCollection, WithHeadings, WithColumnFormatti
             'ID',
             'Họ và tên',
             'Email',
-            // 'Vai trò',
+            'Vai trò',
             'Ngày tham gia',
         ];
     }
@@ -49,6 +49,7 @@ class CustomerExport implements FromCollection, WithHeadings, WithColumnFormatti
                 'ID' => $customer->id,
                 'Họ và tên' => $customer->name,
                 'Email' => $customer->email,
+                'Vai trò' => implode(', ', $customer->getRoleNames()->toArray()),
                 'Ngày tạo' => $customer->created_at->format('d/m/Y'),
             ];
         }));

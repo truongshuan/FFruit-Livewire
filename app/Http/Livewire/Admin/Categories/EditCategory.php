@@ -50,7 +50,7 @@ class EditCategory extends Component
             $this->slug = $category->slug;
             $this->category_id = $category->id;
         } else {
-            redirect()->to('categories');
+            redirect()->to('dashboard/categories');
         }
     }
 
