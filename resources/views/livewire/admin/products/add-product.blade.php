@@ -18,7 +18,7 @@
                             <div class="row mb-3">
                                 <label for="inputText" class="mb-2">Tên sản phẩm</label>
                                 <div class="">
-                                    <input wire:model='name' wire:keyup='generateSlug' type="text" class="form-control">
+                                    <input wire:model='name' wire:keyup='autofillSlug' type="text" class="form-control">
                                     @error('name')
                                     <span class="text-danger mt-2 fw-semibold">{{ $message }}</span>
                                     @enderror

@@ -2,24 +2,27 @@
 
 namespace App\Http\Livewire\Admin\Categories;
 
-use Livewire\Component;
-use App\Models\Category;
-use Livewire\WithPagination;
 use App\Exports\CategoryExport;
+use App\Models\Category;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Response;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class Categories extends Component
 {
     use WithPagination;
 
-    public $category_id = 0;
-    public $perPage = 5;
-    public $selectedRow = [];
-    public $selectedPageRow = false;
-    public $searchTerm = '';
-    public $sortColumnName =  'id';
-    public $sortDirection = 'asc';
+    public int $category_id = 0;
+    public int $perPage = 5;
+    public  $selectedRow = [];
+    public bool $selectedPageRow = false;
+    public string $searchTerm = '';
+    public string $sortColumnName =  'created_at';
+    public string $sortDirection = 'desc';
 
-    protected $paginationTheme = 'bootstrap';
+    protected string $paginationTheme = 'bootstrap';
     protected $listeners = ['deleteConfirmed' => 'detroy'];
     protected $queryString = ['searchTerm' => ['except' => '']];
 
@@ -38,7 +41,7 @@ class Categories extends Component
      *
      * @return void
      */
-    public function sortBy($columnName): void
+    public function sortBy(mixed $columnName): void
     {
         if ($this->sortColumnName === $columnName) {
             $this->sortDirection = $this->swapSortDirection();
@@ -50,11 +53,11 @@ class Categories extends Component
 
     /**
      * Selected rows data
-     * @param mixed $value
+     * @param $value
      *
-     * @return [type]
+     * @return void [type]
      */
-    public function updatedselectedPageRow($value)
+    public function updatedselectedPageRow($value): void
     {
         if ($value) {
             $this->selectedRow = $this->getCategory()->pluck('id')->map(function ($id) {
@@ -66,29 +69,27 @@ class Categories extends Component
     }
 
     /**
-     * @return [type]
+     * @return void [type]
      */
-    public function updatingSearchTerm()
+    public function updatingSearchTerm(): void
     {
         $this->resetPage();
     }
 
     /**
      * Function export data file excel
-     * @param none
-     * @return [type]
+     * @return Response|BinaryFileResponse [type]
      */
-    public function export()
+    public function export(): Response|BinaryFileResponse
     {
         return (new CategoryExport($this->selectedRow))->download('Categories.xlsx');
     }
 
     /**
      * Get categories
-     * @param mixed
-     * @return [data]
+     * @return LengthAwarePaginator [data]
      */
-    public function getCategory()
+    public function getCategory(): LengthAwarePaginator
     {
         return
             Category::query()
@@ -103,9 +104,9 @@ class Categories extends Component
      * Function show popup confirm delete data
      * @param int $id
      *
-     * @return [type]
+     * @return void [type]
      */
-    public function deleteConfirm(int $id)
+    public function deleteConfirm(int $id): void
     {
         $this->category_id = $id;
         $this->dispatchBrowserEvent('show-delete-confirm');
@@ -116,7 +117,7 @@ class Categories extends Component
      * @param none
      * @return void
      */
-    public function detroy()
+    public function detroy(): void
     {
         if ($this->category_id == 0) {
             return;
@@ -129,9 +130,9 @@ class Categories extends Component
     }
 
     /**
-     * @return [type]
+     * @return mixed [type]
      */
-    public function render()
+    public function render(): mixed
     {
         $categories = $this->getCategory();
 

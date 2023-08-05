@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Http\Livewire\Admin\Posts\Posts;
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model
 {

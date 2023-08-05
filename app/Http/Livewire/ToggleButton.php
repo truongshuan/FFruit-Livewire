@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 
 class ToggleButton extends Component
 {

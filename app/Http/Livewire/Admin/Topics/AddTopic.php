@@ -2,21 +2,23 @@
 
 namespace App\Http\Livewire\Admin\Topics;
 
+use App\Http\Requests\TopicRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Topic;
 use Livewire\Component;
-use Illuminate\Support\Str;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class AddTopic extends Component
 {
+
+    use SlugTrait;
+
     public $title, $slug, $content, $status;
 
-    protected $rules = [
-        'title' => 'required|min:6|unique:topics',
-        'content' => 'required',
-        'status' => 'required',
-    ];
+    protected function rules()
+    {
+        return (new TopicRequest('add'))->rules();
+    }
+
     protected $listeners = [
         'desc' => 'setDesc',
     ];
@@ -30,15 +32,15 @@ class AddTopic extends Component
             ->layout('livewire.admin.layouts.base');
     }
 
+
+
     /**
-     * Generate Slug by the title
-     * @return [type]
+     * AutofillSlug
+     * @return void
      */
-    public function generateSlug()
+    public function autofillSlug()
     {
-        if ($this->title) {
-            $this->slug = SlugService::createSlug(Topic::class, 'slug', $this->title);
-        }
+        $this->slug = $this->generateSlug($this->title);
     }
 
     /**
@@ -51,7 +53,7 @@ class AddTopic extends Component
     {
         $this->content = $value;
 
-        $this->validateOnly('content', $this->rules);
+        $this->validateOnly('content', $this->rules(), (new TopicRequest('add'))->messages());
     }
 
     /**
@@ -61,7 +63,7 @@ class AddTopic extends Component
      */
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules);
+        $this->validateOnly($fields, $this->rules(), (new TopicRequest('add'))->messages());
     }
 
     /**
@@ -70,36 +72,22 @@ class AddTopic extends Component
      */
     public function submit()
     {
-        $validateData = $this->validate();
+        $validateData = $this->validate($this->rules(), (new TopicRequest('add'))->messages());
 
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->title);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
         }
-        $slugExists = Topic::where('slug', $this->slug)->exists();
-
-        if ($slugExists) {
+        if ($this->checkSlug($this->slug, Topic::class) === 'error') {
             $this->addError('slug', 'Slug đã tồn tại');
             return;
         }
+
         $validatedData['slug'] = $this->slug;
         if (Topic::create($validateData)) {
             $this->dispatchBrowserEvent('added');
-        } else {
-            return;
+            $this->reset();
         }
-        $this->resetInput();
-    }
-
-    /**
-     * Reset input after save data
-     * @return [type]
-     */
-    public function resetInput()
-    {
-        $this->title = null;
-        $this->status = null;
-        $this->slug = null;
     }
 }

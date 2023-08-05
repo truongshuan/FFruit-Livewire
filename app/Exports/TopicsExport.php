@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Topic;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -41,9 +42,9 @@ class TopicsExport implements FromCollection, WithHeadings, WithColumnFormatting
         ];
     }
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Topic::whereIn('id', $this->selectedRow)->get()->map(function ($topic) {
             return [
@@ -57,8 +58,8 @@ class TopicsExport implements FromCollection, WithHeadings, WithColumnFormatting
         }));
     }
     /**
-     * Styling cell 
-     * 
+     * Styling cell
+     *
      * @return array
      */
     public function registerEvents(): array

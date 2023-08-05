@@ -7,19 +7,19 @@ use Livewire\Component;
 
 class OrderDetail extends Component
 {
-    public $perPage = 5;
-    public $selectedRow = [];
-    public $selectedPageRow = false;
-    public $sortColumnName =  'id';
-    public $sortDirection = 'asc';
-    public $order_id;
+    public int $perPage = 5;
+    public  $selectedRow = [];
+    public bool $selectedPageRow = false;
+    public string $sortColumnName =  'created_at';
+    public string $sortDirection = 'desc';
+    public int $order_id;
 
     /**
      * Get id order
-     * @param mixed $id
+     * @param int $id
      * @return void
      */
-    public function mount($id)
+    public function mount(int $id): void
     {
         $this->order_id = $id;
     }
@@ -39,7 +39,7 @@ class OrderDetail extends Component
      *
      * @return void
      */
-    public function sortBy($columnName): void
+    public function sortBy(string $columnName): void
     {
         if ($this->sortColumnName === $columnName) {
             $this->sortDirection = $this->swapSortDirection();
@@ -53,9 +53,9 @@ class OrderDetail extends Component
      * Selected rows data
      * @param mixed $value
      *
-     * @return [type]
+     * @return void [type]
      */
-    public function updatedselectedPageRow($value)
+    public function updatedselectedPageRow(bool $value): void
     {
         if ($value) {
             $this->selectedRow = $this->getProductOrder()->pluck('id')->map(function ($id) {
@@ -68,9 +68,9 @@ class OrderDetail extends Component
 
     /**
      * Summary of getProductOrder
-     * @return
+     * @return mixed
      */
-    public function getProductOrder()
+    public function getProductOrder(): mixed
     {
         return
             ModelsOrderDetail::where('order_id', $this->order_id)
@@ -82,12 +82,11 @@ class OrderDetail extends Component
             ->paginate($this->perPage);
     }
 
+
     /**
-     * render
-     *
-     * @return void
+     * @return mixed
      */
-    public function render()
+    public function render(): mixed
     {
         $id = $this->order_id;
         $order_detail = $this->getProductOrder();

@@ -3,15 +3,16 @@
 namespace App\Exports;
 
 use App\Models\Category;
-use Maatwebsite\Excel\Events\AfterSheet;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class CategoryExport implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithEvents
 {
@@ -43,9 +44,9 @@ class CategoryExport implements FromCollection, WithHeadings, WithColumnFormatti
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Category::whereIn('id', $this->selectedRow)->get()->map(function ($category) {
             return [
@@ -59,8 +60,8 @@ class CategoryExport implements FromCollection, WithHeadings, WithColumnFormatti
         }));
     }
     /**
-     * Styling cell 
-     * 
+     * Styling cell
+     *
      * @return array
      */
     public function registerEvents(): array

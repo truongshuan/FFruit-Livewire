@@ -2,18 +2,18 @@
 
 namespace App\Http\Livewire\Admin\Posts;
 
+use App\Http\Requests\PostRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Post;
 use App\Models\Topic;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditPost extends Component
 {
     use WithFileUploads;
+    use SlugTrait;
 
     public $title, $slug, $content, $thumbnail, $new_thumbnail, $post_id, $topic_id;
 
@@ -22,14 +22,7 @@ class EditPost extends Component
      */
     protected function rules()
     {
-        return [
-            'title' => [
-                'required',
-                'min:6',
-                Rule::unique('posts', 'title')->ignore($this->post_id),
-            ],
-            'content' => 'required',
-        ];
+        return (new PostRequest('edit'))->rules($this->post_id);
     }
 
     protected $listeners = [
@@ -66,7 +59,7 @@ class EditPost extends Component
     {
         $this->content = $value;
 
-        $this->validateOnly('content', $this->rules());
+        $this->validateOnly('content', $this->rules(), (new PostRequest('edit'))->messages());
     }
 
     /**
@@ -76,14 +69,16 @@ class EditPost extends Component
      */
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules());
+        $this->validateOnly($fields, $this->rules(), (new PostRequest('edit'))->messages());
     }
 
-    public function generateSlug()
+    /**
+     * AutofillSlug
+     * @return void
+     */
+    public function autofillSlug()
     {
-        if ($this->title) {
-            $this->slug = SlugService::createSlug(Topic::class, 'slug', $this->title);
-        }
+        $this->slug = $this->generateSlug($this->title);
     }
 
     /**
@@ -91,15 +86,15 @@ class EditPost extends Component
      */
     public function submit()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new PostRequest('edit'))->messages());
         $slugExists = Post::where('id', $this->post_id)->first();
 
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->title);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
             if ($this->slug !== $slugExists->slug) {
-                if (Post::where('slug', $this->slug)->exists()) {
+                if ($this->checkSlug($this->slug, Post::class) === 'error') {
                     $this->addError('slug', 'Slug đã tồn tại');
                     return;
                 }

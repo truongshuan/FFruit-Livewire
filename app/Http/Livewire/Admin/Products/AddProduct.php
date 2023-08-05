@@ -2,28 +2,25 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
-use App\Models\Product;
-use Livewire\Component;
+use App\Http\Requests\ProductRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Category;
-use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AddProduct extends Component
 {
     use WithFileUploads;
+    use SlugTrait;
 
     public $name, $slug, $price, $sale_price = 0, $description, $path_image, $category_id;
 
-    protected $rules = [
-        'name' => 'required|min:6|unique:products',
-        'price'  => 'required|numeric|min:0|not_in:0',
-        'sale_price' => 'required|numeric|min:0',
-        'description' => 'required',
-        'path_image' => 'required|image|mimes:jpg,png,bmp,gif,svg,webp,jpeg|max:2048',
-        'category_id' => 'required',
-    ];
+    protected function rules()
+    {
+        return (new ProductRequest('add'))->rules();
+    }
 
     protected $listeners = [
         'desc' => 'setDesc',
@@ -38,8 +35,9 @@ class AddProduct extends Component
     {
         $this->description = $value;
 
-        $this->validateOnly('description', $this->rules);
+        $this->validateOnly('description', $this->rules(), (new ProductRequest('add'))->messages());
     }
+
     /**
      * @param mixed $fields
      *
@@ -47,19 +45,16 @@ class AddProduct extends Component
      */
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules);
+        $this->validateOnly($fields, $this->rules(), (new ProductRequest('add'))->messages());
     }
 
     /**
-     * Generate slug by the title
-     * @return [type]
+     * AutofillSlug
+     * @return void
      */
-    public function generateSlug()
+    public function autofillSlug()
     {
-        if ($this->name) {
-            $this->slug =
-                SlugService::createSlug(Product::class, 'slug', $this->name);
-        }
+        $this->slug = $this->generateSlug($this->name);
     }
 
     /**
@@ -68,20 +63,19 @@ class AddProduct extends Component
      */
     public function submit()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new ProductRequest('add'))->messages());
 
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->name);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
         }
-        $slugExists = Product::where('slug', $this->slug)->exists();
-        if ($slugExists) {
+        if ($this->checkSlug($this->slug, Product::class) === 'error') {
             $this->addError('slug', 'Slug đã tồn tại');
             return;
         }
-        $validatedData['slug'] = $this->slug;
 
+        $validatedData['slug'] = $this->slug;
         // Upload image
         if ($this->path_image) {
             $filename = $validatedData['slug'] . '.' . $this->path_image->getClientOriginalExtension();
@@ -94,15 +88,7 @@ class AddProduct extends Component
 
         Product::create($validatedData);
         $this->dispatchBrowserEvent('added');
-        $this->resetInput();
-    }
-    /**
-     * Reset input after submit form
-     * @return [type]
-     */
-    public function resetInput()
-    {
-        $validatedData = null;
+        $this->reset();
     }
 
     /**

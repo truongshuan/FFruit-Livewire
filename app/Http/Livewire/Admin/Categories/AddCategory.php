@@ -2,45 +2,39 @@
 
 namespace App\Http\Livewire\Admin\Categories;
 
-use Livewire\Component;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Category;
-use Illuminate\Support\Str;
+use Livewire\Component;
 
 class AddCategory extends Component
 {
+    use SlugTrait;
 
     public $title, $desc, $status, $slug;
-
-    protected $rules = [
-        'title' => 'required|min:6|unique:categories,title',
-        'desc'  => 'required',
-        'status' => 'required'
-    ];
-    public function generateSlug()
-    {
-        if ($this->title) {
-            $this->slug = Str::slug($this->title);
-        }
-    }
-
-    protected $messages = [
-        'title.required' => 'Tiêu đề không được để trống.',
-        'title.min' => 'Tiêu đề phải có ít nhất :min ký tự.',
-        'title.unique' => 'Tiêu đề đã tồn tại.',
-        'desc.required' => 'Mô tả không được để trống.',
-        'status.required' => 'Trạng thái không được để trống.',
-    ];
-
     protected $listeners = [
         'desc' => 'setDesc',
     ];
+
+    protected function rules()
+    {
+        return (new CategoryRequest('add'))->rules();
+    }
+
+    /**
+     * AutofillSlug
+     * @return void
+     */
+    public function autofillSlug()
+    {
+        $this->slug = $this->generateSlug($this->title);
+    }
 
     /**
      * @return [type]
      */
     public function render()
     {
-
         return view('livewire.admin.categories.add-category')
             ->layout('livewire.admin.layouts.base');
     }
@@ -54,37 +48,35 @@ class AddCategory extends Component
     public function setDesc($value)
     {
         $this->desc = $value;
-
-        $this->validateOnly('desc', $this->rules, $this->messages);
+        $this->validateOnly('desc', $this->rules(), (new CategoryRequest('add'))->messages());
     }
+
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules, $this->messages);
+        $this->validateOnly($fields, $this->rules(), (new CategoryRequest('add'))->messages());
     }
+
     /**
      * Function save data
      * @return [type]
      */
     public function store()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate((new CategoryRequest('add'))->rules(), (new CategoryRequest('add'))->messages());
 
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->title);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
         }
-        $slugExists = Category::where('slug', $this->slug)->exists();
-        if ($slugExists) {
+        if ($this->checkSlug($this->slug, Category::class) === 'error') {
             $this->addError('slug', 'Slug đã tồn tại');
             return;
         }
 
         $validatedData['slug'] = $this->slug;
-        $category = new Category($validatedData);
-        $category->save();
-
+        Category::create($validatedData);
         $this->dispatchBrowserEvent('added');
-        $this->reset(['title', 'desc', 'status', 'slug']);
+        $this->reset();
     }
 }

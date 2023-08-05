@@ -2,35 +2,35 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
-use App\Models\Product;
+use App\Exports\ProductExport;
 use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Exports\ProductExport;
-use Illuminate\Support\Facades\Storage;
 
 class Products extends Component
 {
     use WithPagination;
 
-    public $product_id = 0;
-    public $perPage = 5;
+    public int $product_id = 0;
+    public int $perPage = 5;
     public $selectedRow = [];
-    public $selectedPageRow = false;
-    public $searchTerm = '';
-    public $queryByCategory = '';
-    public $sortColumnName =  'id';
-    public $sortDirection = 'asc';
+    public bool $selectedPageRow = false;
+    public string $searchTerm = '';
+    public string $queryByCategory = '';
+    public string $sortColumnName =  'desc';
+    public string $sortDirection = 'desc';
 
 
-    protected $paginationTheme = 'bootstrap';
+    protected string $paginationTheme = 'bootstrap';
     protected $listeners = ['deleteConfirmed' => 'detroy'];
     protected $queryString = ['searchTerm' => ['except' => '']];
 
     /**
-     * @return [type]
+     * @return void [type]
      */
-    public function cleanUpOldTempImages()
+    public function cleanUpOldTempImages(): void
     {
         $tempImages = Storage::files('livewire-tmp');
 

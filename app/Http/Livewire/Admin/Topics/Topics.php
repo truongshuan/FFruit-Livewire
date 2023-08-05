@@ -3,23 +3,25 @@
 namespace App\Http\Livewire\Admin\Topics;
 
 use App\Models\Topic;
+use Illuminate\Http\Response;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Exports\TopicsExport;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class Topics extends Component
 {
     use WithPagination;
 
-    public $topic_id = 0;
-    public $perPage = 5;
+    public int $topic_id = 0;
+    public int $perPage = 5;
     public $selectedRow = [];
-    public $selectedPageRow = false;
-    public $searchTerm = '';
-    public $sortColumnName =  'id';
-    public $sortDirection = 'asc';
+    public bool $selectedPageRow = false;
+    public string $searchTerm = '';
+    public string $sortColumnName =  'created_at';
+    public string $sortDirection = 'desc';
 
-    protected $paginationTheme = 'bootstrap';
+    protected string $paginationTheme = 'bootstrap';
     protected $listeners = ['deleteConfirmed' => 'detroy'];
 
     protected $queryString = ['searchTerm' => ['except' => '']];
@@ -54,9 +56,9 @@ class Topics extends Component
      * Selected rows data
      * @param mixed $value
      *
-     * @return [type]
+     * @return void [type]
      */
-    public function updatedselectedPageRow($value)
+    public function updatedselectedPageRow($value): void
     {
         if ($value) {
             $this->selectedRow = $this->getTopic()->pluck('id')->map(function ($id) {
@@ -70,23 +72,23 @@ class Topics extends Component
     /**
      * @return [type]
      */
-    public function updatingSearchTerm()
+    public function updatingSearchTerm(): void
     {
         $this->resetPage();
     }
 
     /**
      * Export data file excel
-     * @return [type]
+     * @return Response|BinaryFileResponse [type]
      */
-    public function export()
+    public function export(): Response|BinaryFileResponse
     {
         return (new TopicsExport($this->selectedRow))->download('Topics.xlsx');
     }
 
     /**
      * Get topics
-     * @return [type]
+     * @return mixed [type]
      */
     public function getTopic()
     {
@@ -102,7 +104,7 @@ class Topics extends Component
      * Show the popup comfirm delete
      * @param int $id
      *
-     * @return [type]
+     * @return void [type]
      */
     public function deleteConfirm(int $id)
     {

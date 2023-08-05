@@ -13,16 +13,16 @@ class Posts extends Component
 {
     use WithPagination;
 
-    public $post_id = 0;
-    public $perPage = 5;
+    public int $post_id = 0;
+    public int $perPage = 5;
     public $selectedRow = [];
-    public $selectedPageRow = false;
-    public $searchTerm = '';
-    public $sortColumnName =  'id';
-    public $sortDirection = 'asc';
-    public $queryByTopic = '';
+    public bool $selectedPageRow = false;
+    public string $searchTerm = '';
+    public string $sortColumnName =  'created_at';
+    public string $sortDirection = 'desc';
+    public string $queryByTopic = '';
 
-    protected $paginationTheme = 'bootstrap';
+    protected string $paginationTheme = 'bootstrap';
     protected $listeners = ['deleteConfirmed' => 'detroy'];
 
     protected $queryString = ['searchTerm' => ['except' => '']];
@@ -43,7 +43,7 @@ class Posts extends Component
         $this->sortColumnName = $columnName;
     }
 
-    public function updatedselectedPageRow($value)
+    public function updatedselectedPageRow($value): void
     {
         if ($value) {
             $this->selectedRow = $this->getPosts()->pluck('id')->map(function ($id) {
@@ -54,7 +54,7 @@ class Posts extends Component
         }
     }
 
-    public function updatingSearchTerm()
+    public function updatingSearchTerm(): void
     {
         $this->resetPage();
     }
@@ -63,7 +63,7 @@ class Posts extends Component
         $this->resetPage();
     }
 
-    public function export()
+    public function export(): \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         return (new PostExport($this->selectedRow))->download('Posts.xlsx');
     }
@@ -81,7 +81,7 @@ class Posts extends Component
             ->paginate($this->perPage);
     }
 
-    public function deleteConfirm(int $id)
+    public function deleteConfirm(int $id): void
     {
         $this->post_id = $id;
         $this->dispatchBrowserEvent('show-delete-confirm');

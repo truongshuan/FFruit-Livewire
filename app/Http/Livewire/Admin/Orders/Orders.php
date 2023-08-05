@@ -4,20 +4,23 @@ namespace App\Http\Livewire\Admin\Orders;
 
 use App\Exports\OrderExport;
 use App\Models\Order;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Response;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class Orders extends Component
 {
     use WithPagination;
-    public $perPage = 5;
-    public $searchTerm = '';
-    public $sortColumnName =  'id';
-    public $sortDirection = 'asc';
+    public int $perPage = 5;
+    public string $searchTerm = '';
+    public string $sortColumnName =  'created_at';
+    public string $sortDirection = 'desc';
     public $selectedRow = [];
-    public $selectedPageRow = false;
-    public $selectByStatus = '';
-    protected $paginationTheme = 'bootstrap';
+    public bool $selectedPageRow = false;
+    public string $selectByStatus = '';
+    protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['searchTerm' => ['except' => '']];
 
     /**
@@ -34,7 +37,7 @@ class Orders extends Component
      *
      * @return void
      */
-    public function sortBy($columnName): void
+    public function sortBy(string $columnName): void
     {
         if ($this->sortColumnName === $columnName) {
             $this->sortDirection = $this->swapSortDirection();
@@ -48,9 +51,9 @@ class Orders extends Component
      * Selected rows data
      * @param mixed $value
      *
-     * @return [type]
+     * @return void [type]
      */
-    public function updatedselectedPageRow($value)
+    public function updatedselectedPageRow($value): void
     {
         if ($value) {
             $this->selectedRow = $this->getOrders()->pluck('id')->map(function ($id) {
@@ -65,26 +68,25 @@ class Orders extends Component
      * Reset pagination when searching
      * @return void
      */
-    public function updatingSearchTerm()
+    public function updatingSearchTerm(): void
     {
         $this->resetPage();
     }
 
     /**
      * Function export data file excel
-     * @param none
-     * @return [type]
+     * @return Response|BinaryFileResponse [type]
      */
-    public function export()
+    public function export(): \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         return (new OrderExport($this->selectedRow))->download('Orders.xlsx');
     }
 
     /**
      * Summary of getOrders
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
-    public function getOrders()
+    public function getOrders(): LengthAwarePaginator
     {
         return
             Order::query()
@@ -103,9 +105,9 @@ class Orders extends Component
     }
 
     /**
-     * @return [type]
+     * @return mixed [type]
      */
-    public function render()
+    public function render(): mixed
     {
         $orders = $this->getOrders();
 

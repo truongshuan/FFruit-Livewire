@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
     use HasFactory;
-    use Sluggable;
+    // use Sluggable;
 
     /**
      * Summary of table
@@ -44,18 +45,18 @@ class Product extends Model
 
     /**
      * Relationship many-to-one with categories table
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
      * Relationship one-to-many with order detail table
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function orderDetails()
+    public function orderDetails(): HasMany
     {
         return $this->hasMany(OrderDetail::class);
     }
@@ -82,7 +83,7 @@ class Product extends Model
      * Get thumbnail url
      * @return string|null
      */
-    public function getImageUrl()
+    public function getImageUrl(): ?string
     {
         if ($this->path_image) {
             return Storage::disk('products')->url($this->path_image);

@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Product;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -47,9 +48,9 @@ class ProductExport implements FromCollection, WithHeadings, WithColumnFormattin
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Product::whereIn('id', $this->selectedRow)->get()->map(function ($product) {
             return [
@@ -66,8 +67,8 @@ class ProductExport implements FromCollection, WithHeadings, WithColumnFormattin
     }
 
     /**
-     * Styling cell 
-     * 
+     * Styling cell
+     *
      * @return array
      */
     public function registerEvents(): array

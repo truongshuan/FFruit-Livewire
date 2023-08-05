@@ -3,20 +3,21 @@
 namespace App\Http\Livewire\Admin\Roles;
 
 use Livewire\Component;
+use PhpOption\None;
 use Spatie\Permission\Models\Role;
 
 class Roles extends Component
 {
-    public $role_id = 0;
+    public int $role_id = 0;
     protected $listeners = ['deleteConfirmed' => 'detroy'];
 
     /**
      * Function show popup confirm delete data
      * @param int $id
      *
-     * @return [type]
+     * @return void [type]
      */
-    public function deleteConfirm(int $id)
+    public function deleteConfirm(int $id): void
     {
         $this->role_id = $id;
         $this->dispatchBrowserEvent('show-delete-confirm');
@@ -27,7 +28,7 @@ class Roles extends Component
      * @param none
      * @return void
      */
-    public function detroy()
+    public function detroy(): void
     {
         if ($this->role_id == 0) {
             dd($this->role_id);

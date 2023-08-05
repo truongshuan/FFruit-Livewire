@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire\Admin\Roles;
 
+use App\Http\Requests\RoleRequest;
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AddRole extends Component
 {
     public $name, $selectedPermissions = [];
-    protected $rules = [
-        'name' => 'required|unique:roles,name',
-        'selectedPermissions' => 'required',
-    ];
+    protected function rules()
+    {
+        return (new RoleRequest('add'))->rules();
+    }
 
     /**
      * @param mixed $fields
@@ -21,7 +22,7 @@ class AddRole extends Component
      */
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules);
+        $this->validateOnly($fields, $this->rules(), (new RoleRequest('add'))->messages());
     }
 
     /**
@@ -30,13 +31,14 @@ class AddRole extends Component
      */
     public function store()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new RoleRequest('add'))->messages());
         $validatedData['selectedPermissions'] = $this->selectedPermissions;
 
         $role = Role::create(['name' => $validatedData['name']]);
         $role->syncPermissions($validatedData['selectedPermissions']);
 
         $this->dispatchBrowserEvent('added');
+        $this->reset();
     }
 
     /**

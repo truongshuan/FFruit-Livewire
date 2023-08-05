@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Order;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -47,9 +48,9 @@ class OrderExport implements FromCollection, WithHeadings, WithColumnFormatting,
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Order::whereIn('id', $this->selectedRow)->get()->map(function ($order) {
             $statuses = [

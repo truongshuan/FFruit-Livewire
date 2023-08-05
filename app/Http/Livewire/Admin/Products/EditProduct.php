@@ -2,18 +2,18 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
-use App\Models\Product;
-use Livewire\Component;
+use App\Http\Requests\ProductRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Category;
-use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditProduct extends Component
 {
     use WithFileUploads;
+    use SlugTrait;
 
     public $name, $slug, $price, $sale_price, $category_id, $description, $path_image, $new_image, $product_id;
 
@@ -27,19 +27,7 @@ class EditProduct extends Component
      */
     protected function rules()
     {
-        return [
-            'name' => [
-                'required', 'min:6', Rule::unique('products', 'name')->ignore($this->product_id),
-            ],
-            'price' => [
-                'required', 'numeric', 'min:0', 'not_in:0'
-            ],
-            'sale_price' => [
-                'required', 'numeric', 'min:0'
-            ],
-            'description' => 'required',
-            'category_id' => 'required',
-        ];
+        return (new ProductRequest('edit'))->rules($this->product_id);
     }
 
     /**
@@ -75,7 +63,7 @@ class EditProduct extends Component
     {
         $this->description = $value;
 
-        $this->validateOnly('description', $this->rules());
+        $this->validateOnly('description', $this->rules(), (new ProductRequest('edit'))->messages());
     }
 
     /**
@@ -89,15 +77,14 @@ class EditProduct extends Component
     }
 
     /**
-     * @return [type]
+     * AutofillSlug
+     * @return void
      */
-    public function generateSlug()
+    public function autofillSlug()
     {
-        if ($this->name) {
-            $this->slug =
-                SlugService::createSlug(Product::class, 'slug', $this->name);
-        }
+        $this->slug = $this->generateSlug($this->name);
     }
+
 
     /**
      *  Update data
@@ -105,17 +92,17 @@ class EditProduct extends Component
      */
     public function submit()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new ProductRequest('edit'))->messages());
 
         // Check slug exists
         $slugExists = Product::where('id', $this->product_id)->first();
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->name);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
             if ($this->slug !== $slugExists->slug) {
-                if (Product::where('slug', $this->slug)->exists()) {
-                    $this->addError('slug', 'Slug already exists');
+                if ($this->checkSlug($this->slug, Product::class) === 'error') {
+                    $this->addError('slug', 'Slug đã tồn tại');
                     return;
                 }
             }

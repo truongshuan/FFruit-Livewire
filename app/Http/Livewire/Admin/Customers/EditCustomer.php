@@ -34,7 +34,7 @@ class EditCustomer extends Component
      * @param none
      * @return void
      */
-    public function store()
+    public function store(): void
     {
         $customer = User::find($this->customer_id);
         DB::table('model_has_roles')->where('model_id', $this->customer_id)->delete();
@@ -47,7 +47,7 @@ class EditCustomer extends Component
      * Summary of render
      * @return mixed
      */
-    public function render()
+    public function render(): mixed
     {
         $roles = Role::pluck('name', 'name')->all();
         $userRole = User::find($this->customer_id)->roles->pluck('name', 'name')->all();

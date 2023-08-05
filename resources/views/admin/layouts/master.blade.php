@@ -12,8 +12,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/admin/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/admin/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/client/img/pngwing.com.png') }}" />
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -39,9 +38,15 @@
 </head>
 
 <body>
+    @if (!isset($is404) || !$is404)
     @include('admin.layouts.header')
+    @endif
+
     @yield('content')
+
+    @if (!isset($is404) || !$is404)
     @include('admin.layouts.footer')
+    @endif
 
     @livewireScripts
     {{-- <script

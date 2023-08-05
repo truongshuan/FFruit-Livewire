@@ -101,7 +101,7 @@
                                         </td>
                                         <td>
                                             <p class="d-inline-block text-truncate" style="width: 150px">
-                                                {!! $post->content!!}
+                                                {{ $post->content }}
                                             </p>
                                         </td>
                                         <td>{{ $post->created_at->format('d/m/Y') }}</td>

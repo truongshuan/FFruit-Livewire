@@ -19,7 +19,7 @@
                             <div class="row mb-3">
                                 <label for="inputText" class="mb-2">Tiêu đề</label>
                                 <div class="col-sm-10">
-                                    <input wire:model='title' wire:keyup='generateSlug' type="text"
+                                    <input wire:model='title' wire:keyup='autofillSlug' type="text"
                                         class="form-control">
                                     @error('title')
                                     <span class="text-danger mt-2 fw-semibold">{{ $message }}</span>

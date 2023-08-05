@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
@@ -23,9 +24,9 @@ class Post extends Model
 
     /**
      * Summary of topic
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function topic()
+    public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class, 'topic_id');
     }
@@ -59,5 +60,10 @@ class Post extends Model
                     $query->where('title', 'like', $term);
                 });
         });
+    }
+
+    public static function getBySlug($slug)
+    {
+        return Post::where('slug', $slug)->select('id', 'title', 'content', 'thumbnail', 'created_at', 'topic_id')->first();
     }
 }

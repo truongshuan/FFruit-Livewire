@@ -2,39 +2,24 @@
 
 namespace App\Http\Livewire\Admin\Categories;
 
-use Livewire\Component;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Category;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
+use Livewire\Component;
 
 class EditCategory extends Component
 {
+    use SlugTrait;
+
     public $title, $slug, $desc, $category_id;
     protected $listeners = [
         'desc' => 'setDesc',
     ];
-    /**
-     * Initialization data
-     * @return [type]
-     */
+
     protected function rules()
     {
-        return [
-            'title' => [
-                'required',
-                'min:6',
-                Rule::unique('categories', 'title')->ignore($this->category_id),
-            ],
-            'desc' => 'required',
-        ];
+        return (new CategoryRequest('edit'))->rules($this->category_id);
     }
-
-    protected $messages = [
-        'title.required' => 'Tiêu đề không được để trống.',
-        'title.min' => 'Tiêu đề phải có ít nhất :min ký tự.',
-        'title.unique' => 'Tiêu đề đã tồn tại.',
-        'desc.required' => 'Mô tả không được để trống.',
-    ];
 
     /**
      * @param int $id
@@ -55,15 +40,14 @@ class EditCategory extends Component
     }
 
     /**
-     * Generate slug by title
-     * @return [string]
+     * AutofillSlug
+     * @return void
      */
-    public function generateSlug()
+    public function autofillSlug()
     {
-        if ($this->title) {
-            $this->slug = Str::slug($this->title);
-        }
+        $this->slug = $this->generateSlug($this->title);
     }
+
     /**
      * @param mixed $value
      *
@@ -73,11 +57,11 @@ class EditCategory extends Component
     {
         $this->desc = $value;
 
-        $this->validateOnly('desc', $this->rules(), $this->messages);
+        $this->validateOnly('desc', $this->rules(), (new CategoryRequest('add'))->messages());
     }
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules(), $this->messages);
+        $this->validateOnly($fields, $this->rules(), (new CategoryRequest('add'))->messages());
     }
     /**
      * Save data
@@ -85,29 +69,26 @@ class EditCategory extends Component
      */
     public function submit()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new CategoryRequest('add'))->messages());
 
         $slugExists = Category::where('id', $this->category_id)->first();
+
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->title);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
             if ($this->slug !== $slugExists->slug) {
-                if (Category::where('slug', $this->slug)->exists()) {
+                if ($this->checkSlug($this->slug, Category::class) === 'error')
                     $this->addError('slug', 'Slug đã tồn tại');
-                    return;
-                }
+                return;
             }
         }
-        $validatedData['slug'] = $this->slug;
 
+        $validatedData['slug'] = $this->slug;
         Category::find($this->category_id)->update($validatedData);
         $this->dispatchBrowserEvent('edited');
     }
 
-    /**
-     * @return [type]
-     */
     public function render()
     {
         return view('livewire.admin.categories.edit-category')

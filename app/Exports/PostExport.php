@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Post;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -42,9 +43,9 @@ class PostExport implements FromCollection, WithHeadings, WithColumnFormatting, 
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Post::whereIn('id', $this->selectedRow)->get()->map(function ($post) {
             return [

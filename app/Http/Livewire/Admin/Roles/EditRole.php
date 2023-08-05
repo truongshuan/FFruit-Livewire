@@ -2,18 +2,19 @@
 
 namespace App\Http\Livewire\Admin\Roles;
 
+use App\Http\Requests\RoleRequest;
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class EditRole extends Component
 {
     public $name, $role_id, $selectedPermissions = [];
 
-    protected $rules = [
-        'name' => 'required',
-        'selectedPermissions' => 'required',
-    ];
+    protected function rules()
+    {
+        return (new RoleRequest('edit'))->rules($this->role_id);
+    }
 
     /**
      * @param mixed $fields
@@ -22,7 +23,7 @@ class EditRole extends Component
      */
     public function updated($fields)
     {
-        $this->validateOnly($fields, $this->rules);
+        $this->validateOnly($fields, $this->rules(), (new RoleRequest('edit'))->messages());
     }
 
 
@@ -49,7 +50,7 @@ class EditRole extends Component
      */
     public function store()
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new RoleRequest('edit'))->messages());
         $validatedData['selectedPermissions'] = $this->selectedPermissions;
 
         $role = Role::find($this->role_id);

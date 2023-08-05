@@ -2,71 +2,78 @@
 
 namespace App\Http\Livewire\Admin\Posts;
 
+use App\Http\Requests\PostRequest;
+use App\Http\Traits\SlugTrait;
 use App\Models\Post;
 use App\Models\Topic;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Validation\ValidationException;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AddPost extends Component
 {
     use WithFileUploads;
+    use SlugTrait;
 
     public $title, $slug, $thumbnail, $content, $topic_id;
 
-    protected $rules = [
-        'title' => 'required|min:15|max:255|unique:posts,title',
-        'topic_id' => 'required',
-        'content' => 'required',
-        'thumbnail' => 'required|image|mimes:jpg,png,bmp,gif,svg,webp,jpeg|max:2048',
-    ];
+    protected function rules(): array
+    {
+        return (new PostRequest('add'))->rules();
+    }
+
     protected $listeners = [
         'desc' => 'setContent',
     ];
+
     /**
      * @param mixed $value
      *
-     * @return [type]
+     * @return void [type]
+     * @throws ValidationException
      */
-    public function setContent($value)
+    public function setContent($value): void
     {
         $this->content = $value;
 
-        $this->validateOnly('content', $this->rules);
+        $this->validateOnly('content', $this->rules(), (new PostRequest('add'))->messages());
     }
+
     /**
      * @param mixed $fields
      *
-     * @return [type]
+     * @return void [type]
+     * @throws ValidationException
      */
-    public function updated($fields)
+    public function updated(mixed $fields): void
     {
-        $this->validateOnly($fields, $this->rules);
+        $this->validateOnly($fields, $this->rules(), (new PostRequest('add'))->messages());
     }
+
+
     /**
-     * @return [type]
+     * AutofillSlug
+     * @return void
      */
-    public function generateSlug()
+    public function autofillSlug(): void
     {
-        if ($this->title) {
-            $this->slug = SlugService::createSlug(Topic::class, 'slug', $this->title);
-        }
+        $this->slug = $this->generateSlug($this->title);
     }
+
+
     /**
-     * @return [type]
+     * @return void [type]
      */
-    public function submit()
+    public function submit(): void
     {
-        $validatedData = $this->validate();
+        $validatedData = $this->validate($this->rules(), (new PostRequest('add'))->messages());
         if (!$this->slug) {
-            $this->generateSlug();
+            $this->slug = $this->generateSlug($this->title);
         } else {
-            $this->slug = Str::slug($this->slug);
+            $this->slug = $this->generateSlug($this->slug);
         }
-        $slugExists = Post::where('slug', $this->slug)->exists();
-        if ($slugExists) {
+        if ($this->checkSlug($this->slug, Post::class) === 'error') {
             $this->addError('slug', 'Slug đã tồn tại');
             return;
         }
@@ -84,20 +91,13 @@ class AddPost extends Component
 
         Post::create($validatedData);
         $this->dispatchBrowserEvent('added');
-        $this->resetInput();
-    }
-    /**
-     * @return [type]
-     */
-    public function resetInput()
-    {
-        $validatedData = null;
+        $this->reset();
     }
 
     /**
-     * @return [type]
+     * @return mixed [type]
      */
-    public function render()
+    public function render(): mixed
     {
         return view('livewire.admin.posts.add-post', ['topcics' => Topic::all()])->layout('livewire.admin.layouts.base');
     }
