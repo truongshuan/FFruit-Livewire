@@ -1,4 +1,4 @@
-@section('title', 'Add Category')
+@section('title', 'Phân quyền')
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Phân Quyền</h1>

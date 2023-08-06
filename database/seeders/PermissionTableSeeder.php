@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionTableSeeder extends Seeder
 {
@@ -14,13 +13,13 @@ class PermissionTableSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            'role-manage',
-            'post-manage',
-            'product-manage',
-            'order-manage',
+            ['name' => 'role-manage', 'guard_name' => 'admin'],
+            ['name' => 'post-manage', 'guard_name' => 'admin'],
+            ['name' => 'product-manage', 'guard_name' => 'admin'],
         ];
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+
+        foreach ($permissions as $permissionData) {
+            Permission::create($permissionData);
         }
     }
 }

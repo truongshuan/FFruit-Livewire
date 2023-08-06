@@ -17,6 +17,7 @@ class EditPost extends Component
 
     public $title, $slug, $content, $thumbnail, $new_thumbnail, $post_id, $topic_id;
 
+
     /**
      * @return [type]
      */

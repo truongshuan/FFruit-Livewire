@@ -3,9 +3,6 @@
 namespace App\Http\Livewire\Client;
 
 use App\Models\Product;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Livewire\Component;
 
 class CartList extends Component
@@ -15,6 +12,7 @@ class CartList extends Component
     public array $quantities = [];
     public bool $selectAll = false;
     public array $selectedRow = [];
+    public $item;
 
     protected $listeners = ['refreshCart' => 'render'];
 
@@ -130,9 +128,9 @@ class CartList extends Component
     }
 
     /**
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     * @return
      */
-    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function render()
     {
         $cart = session('cart', []);
         $this->cart = collect($cart)->map(function ($item) {
@@ -146,11 +144,11 @@ class CartList extends Component
         })->all();
 
         // Lọc những item được chọn trong mảng cart
-        $selectedCart = collect($this->cart)->filter(function ($item) {
+        $this->item = collect($this->cart)->filter(function ($item) {
             return in_array($item['product']->id, $this->selectedRow);
         });
         // Tính tổng tiền những item được chọn
-        $total = $selectedCart->sum('subtotal');
+        $total = $this->item->sum('subtotal');
 
         // Tổng số lượng item trong giỏ hàng
         $totalQuantity = collect($this->cart)->sum(function ($item) {
@@ -162,5 +160,21 @@ class CartList extends Component
             'totalQuantity' => $totalQuantity,
             'totalbill' => $total
         ]);
+    }
+
+    public function checkout()
+    {
+        $item = $this->item;
+        if ($item->count() > 0) {
+            session(['checkoutCart' => $item]);
+            return redirect()->to('/checkout');
+        } else {
+            flash()
+                ->options([
+                    'timeout' => 1500,
+                    'position' => 'top-center',
+                ])
+                ->addInfo('Vui lòng chọn sản phẩm muốn đặt!');
+        }
     }
 }

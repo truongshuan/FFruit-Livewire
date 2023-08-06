@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Admin\Customers;
 
-use App\Models\User;
-use Livewire\Component;
+use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
 class EditCustomer extends Component
@@ -18,13 +18,13 @@ class EditCustomer extends Component
      */
     public function mount(int $id)
     {
-        $customer = User::find($id);
+        $customer = Admin::find($id);
         if ($customer) {
             $this->customer_id = $customer->id;
-            $userRole = User::find($this->customer_id)->roles->pluck('name')->toArray();
+            $userRole = Admin::find($this->customer_id)->roles->pluck('name')->toArray();
             $this->role = $userRole;
         } else {
-            return redirect()->to('dashboard/customers');
+            return redirect()->to('admin/customers');
         }
     }
 
@@ -36,7 +36,7 @@ class EditCustomer extends Component
      */
     public function store(): void
     {
-        $customer = User::find($this->customer_id);
+        $customer = Admin::find($this->customer_id);
         DB::table('model_has_roles')->where('model_id', $this->customer_id)->delete();
         $customer->assignRole($this->role);
         $this->dispatchBrowserEvent('edited');
@@ -50,7 +50,8 @@ class EditCustomer extends Component
     public function render(): mixed
     {
         $roles = Role::pluck('name', 'name')->all();
-        $userRole = User::find($this->customer_id)->roles->pluck('name', 'name')->all();
+        $userRole = Admin::find($this->customer_id)->roles->pluck('name', 'name')->all();
+
         return view('livewire.admin.customers.edit-customer', compact('roles', 'userRole'))->layout('livewire.admin.layouts.base');
     }
 }

@@ -46,57 +46,57 @@
             </div>
         </div>
         <div class="row">
-            @for($i = 1; $i<= 6; $i++)
-                <div wire:loading.delay class="col-lg-4 col-md-6">
-                    <div class="single-latest-news">
-                        <a href="">
-                            <div class="skeleton-image"></div>
-                        </a>
-                        <div class="news-text-box">
-                            <div class="skeleton-title-post"></div>
-                            <div class="skeleton-author"></div>
-                            <div class="skeleton-category"></div>
-                            <div href="" class="skeleton-btn-post"></div>
-                        </div>
-                    </div>
-                </div>
-            @endfor
-        </div>
-        <div wire:loading.remove class="row">
-            @foreach ($posts as $post)
-            <div class="col-lg-4 col-md-6">
+            @for($i = 1; $i<= 6; $i++) <div wire:loading.delay class="col-lg-4 col-md-6">
                 <div class="single-latest-news">
-                    <a href="{{ route('new_detail', ['slug'=> $post->slug]) }}">
-                        <div class="latest-news-bg"
-                            style="background-image: url({{ Storage::disk('posts')->url($post->thumbnail) }})"></div>
+                    <a href="">
+                        <div class="skeleton-image"></div>
                     </a>
                     <div class="news-text-box">
-                        <h3><a href="{{ route('new_detail', ['slug'=> $post->slug]) }}">
-                                {{$post->title}}</a></h3>
-                        <p class="blog-meta">
-                            <span class="author"><i class="fas fa-user"></i> Admin</span>
-                            <span class="date"><i class="fas fa-calendar"></i>
-                                {{ $post->created_at->format('d/m/Y')}}
-                            </span>
-                        </p>
-                        <p class="excerpt d-inline-block text-truncate" style="max-width: 100%;">
-                            Bài viết thuộc chủ đề: <b>{{ $post->topic->title }}</b>
-                        </p>
-                        <a href="{{ route('new_detail', ['slug'=> $post->slug]) }}" class="read-more-btn">Đọc thêm<i
-                                class="fas fa-angle-right"></i></a>
+                        <div class="skeleton-title-post"></div>
+                        <div class="skeleton-author"></div>
+                        <div class="skeleton-category"></div>
+                        <div href="" class="skeleton-btn-post"></div>
                     </div>
                 </div>
-            </div>
-            @endforeach
         </div>
-        <div wire:loading.remove class="row">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        {{ $posts->links('custom-pagination-livewire') }}
-                    </div>
+        @endfor
+    </div>
+    <div wire:loading.remove class="row">
+        @foreach ($posts as $post)
+        <div class="col-lg-4 col-md-6">
+            <div class="single-latest-news">
+                <a href="{{ route('new_detail', ['slug'=> $post->slug]) }}">
+                    <div class="latest-news-bg"
+                        style="background-image: url({{ Storage::disk('posts')->url($post->thumbnail) }})"></div>
+                </a>
+                <div class="news-text-box">
+                    <h3><a href="{{ route('new_detail', ['slug'=> $post->slug]) }}">
+                            {{$post->title}}</a></h3>
+                    <p class="blog-meta">
+                        <span class="author"><i class="fas fa-user"></i> Admin - - Đăng {{
+                            $post->created_at->locale('vi_VN')->diffForHumans() }}</span>
+                        <span class="date"><i class="fas fa-calendar"></i>
+                            {{ $post->created_at->format('d/m/Y')}}
+                        </span>
+                    </p>
+                    <p class="excerpt d-inline-block text-truncate" style="max-width: 100%;">
+                        Bài viết thuộc chủ đề: <b>{{ $post->topic->title }}</b>
+                    </p>
+                    <a href="{{ route('new_detail', ['slug'=> $post->slug]) }}" class="read-more-btn">Đọc thêm<i
+                            class="fas fa-angle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    <div wire:loading.remove class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    {{ $posts->links('custom-pagination-livewire') }}
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>

@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Admin\Roles;
 
 use Livewire\Component;
-use PhpOption\None;
 use Spatie\Permission\Models\Role;
 
 class Roles extends Component

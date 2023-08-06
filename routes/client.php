@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Clients\HomeController;
 use App\Http\Controllers\Clients\SinglePostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\Client\SingleProduct;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,16 @@ Route::group(['prefix' => 'shops'], function () {
         return view('client.pages.shop');
     })->name('shops');
     Route::get('/{slug}', SingleProduct::class)->name('detail');
+});
+
+// Authencation
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+    Route::get('checkout', function () {
+        return view('client.pages.checkout');
+    });
 });

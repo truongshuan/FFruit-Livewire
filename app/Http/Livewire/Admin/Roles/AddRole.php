@@ -34,7 +34,7 @@ class AddRole extends Component
         $validatedData = $this->validate($this->rules(), (new RoleRequest('add'))->messages());
         $validatedData['selectedPermissions'] = $this->selectedPermissions;
 
-        $role = Role::create(['name' => $validatedData['name']]);
+        $role = Role::create(['name' => $validatedData['name'], 'guard_name' => 'admin']);
         $role->syncPermissions($validatedData['selectedPermissions']);
 
         $this->dispatchBrowserEvent('added');

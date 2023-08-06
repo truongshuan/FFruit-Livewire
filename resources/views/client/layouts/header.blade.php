@@ -37,19 +37,35 @@
                             <li><a href="/contact">Liên hệ</a></li>
                             <li>
                                 <a href="/shops">Shop</a>
-
                             </li>
+                            @if (Auth::check())
                             <li>
-                                <a href="shop.html">Tài khoản</a>
+                                <a href="{{ route('profile.edit') }}">{{ Auth::user()->name }}</a>
                                 <ul class="sub-menu">
                                     <li>
-                                        <a href="shop.html">Đăng nhập</a>
+                                        <a href="{{ route('profile.edit') }}">{{ __('Thông tin') }}</a>
                                     </li>
                                     <li>
-                                        <a href="checkout.html">Đăng ký</a>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button class="logout-btn">{{ __('Đăng xuất') }}</button>
+                                        </form>
                                     </li>
                                 </ul>
                             </li>
+                            @else
+                            <li>
+                                <a href="#">Tài khoản</a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="{{ route('login') }}">Đăng nhập</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('register') }}">Đăng ký</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @endif
                             <li>
                                 <livewire:client.cart-count />
                             </li>

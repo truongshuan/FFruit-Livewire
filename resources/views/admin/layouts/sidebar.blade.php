@@ -59,7 +59,7 @@
         </li><!-- End Components Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
-                <span>Khách hàng</span><i class="bi bi-chevron-down ms-auto"></i>
+                <span>Quản lý nhân viên</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="user-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>

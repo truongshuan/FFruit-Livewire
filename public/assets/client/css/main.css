@@ -1074,6 +1074,19 @@ a.bordered-btn:hover {
     color: #fff;
 }
 
+.logout-btn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 13px;
+    transition: all;
+    font-weight: 550;
+    margin-left: 4px;
+}
+.logout-btn:hover {
+    color: #f28123;
+}
+
 ul.sub-menu a {
     -webkit-transition: 0.3s;
     -o-transition: 0.3s;

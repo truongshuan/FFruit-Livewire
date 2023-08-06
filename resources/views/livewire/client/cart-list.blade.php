@@ -104,8 +104,7 @@
                         @if($selectedRow)
                         <a wire:click='deleteRow()' class="boxed-btn">Xóa sản phẩm đã chọn</a>
                         @endif
-
-                        <a href="checkout.html" class="boxed-btn black">Đặt hàng</a>
+                        <a wire:click='checkout()' class="boxed-btn black">Đặt hàng</a>
                     </div>
                 </div>
 

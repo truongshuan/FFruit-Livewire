@@ -19,7 +19,7 @@ class Products extends Component
     public bool $selectedPageRow = false;
     public string $searchTerm = '';
     public string $queryByCategory = '';
-    public string $sortColumnName =  'desc';
+    public string $sortColumnName =  'created_at';
     public string $sortDirection = 'desc';
 
 

@@ -18,6 +18,7 @@ class AddPost extends Component
 
     public $title, $slug, $thumbnail, $content, $topic_id;
 
+
     protected function rules(): array
     {
         return (new PostRequest('add'))->rules();

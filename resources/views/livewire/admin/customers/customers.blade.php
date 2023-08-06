@@ -1,7 +1,7 @@
 @section('title', 'Users')
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Danh sách khách hàng</h1>
+        <h1>Danh sách nhân viên</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">

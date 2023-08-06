@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'route_path' => 'dashboard/log-viewer',
+    'route_path' => 'admin/log-viewer',
 
     /*
     |--------------------------------------------------------------------------
@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'back_to_system_url' => config('http://127.0.0.1:8000', '/dashboard'),
+    'back_to_system_url' => config('http://127.0.0.1:8000', '/admin/dashboard'),
 
     'back_to_system_label' => null, // Displayed by default: "Back to {{ app.name }}"
 

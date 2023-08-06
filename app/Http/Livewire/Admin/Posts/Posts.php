@@ -2,16 +2,17 @@
 
 namespace App\Http\Livewire\Admin\Posts;
 
-use App\Models\Post;
-use Livewire\Component;
 use App\Exports\PostExport;
+use App\Models\Post;
 use App\Models\Topic;
-use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class Posts extends Component
 {
     use WithPagination;
+
 
     public int $post_id = 0;
     public int $perPage = 5;
@@ -26,6 +27,8 @@ class Posts extends Component
     protected $listeners = ['deleteConfirmed' => 'detroy'];
 
     protected $queryString = ['searchTerm' => ['except' => '']];
+
+
 
     public function swapSortDirection(): string
     {

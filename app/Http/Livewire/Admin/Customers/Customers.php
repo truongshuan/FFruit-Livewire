@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin\Customers;
 
 use App\Exports\CustomerExport;
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\Response;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -75,14 +75,14 @@ class Customers extends Component
      * Function export data file excel
      * @return Response|BinaryFileResponse [type]
      */
-    public function export(): \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function export()
     {
         return (new CustomerExport($this->selectedRow))->download('Customers.xlsx');
     }
     public function getCustomers(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return
-            User::query()
+            Admin::query()
             ->when($this->searchTerm, function ($query) {
                 return $query->search(trim($this->searchTerm));
             })
