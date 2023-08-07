@@ -131,7 +131,7 @@ class Products extends Component
      */
     public function render(): View|Factory
     {
-        sleep(1);
+        sleep(0.6);
         $categories = Category::all(['id', 'title', 'slug']);
         $products = $this->getSortedProducts();
         return view('livewire.client.products', compact('categories', 'products'));

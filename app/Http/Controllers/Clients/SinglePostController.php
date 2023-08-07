@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class SinglePostController extends Controller
 {
+    public function index()
+    {
+        return view('client.pages.news');
+    }
     public function show(string $slug)
     {
         $post = Post::getBySlug($slug);

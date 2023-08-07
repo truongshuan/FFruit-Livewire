@@ -26,7 +26,8 @@ class CheckoutRequest extends FormRequest
             'customer_email' => 'required|email',
             'customer_phone' => 'required|min:10|max:11',
             'shipping_address' => 'required|string',
-            'note' => 'required'
+            'note' => 'required',
+            'payment' => 'required'
         ];
     }
 
@@ -38,6 +39,7 @@ class CheckoutRequest extends FormRequest
             'max' => ':attribute phải dưới :max kí tự',
             'email' => ':attribute không hợp lệ',
             'string' => ':attribute phải là một dãy kí tự',
+            'payment.required' => 'Vui lòng chọn phương thức thanh toán',
         ];
     }
 
@@ -49,7 +51,7 @@ class CheckoutRequest extends FormRequest
             'customer_email' => 'Email',
             'customer_phone' => 'Số điện thoại',
             'shipping_address' => 'Địa chỉ nhận hàng',
-            'note' => 'Ghi chú'
+            'note' => 'Ghi chú',
         ];
     }
 }

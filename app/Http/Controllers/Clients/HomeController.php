@@ -16,4 +16,20 @@ class HomeController extends Controller
             ->get();
         return view('client.pages.index', compact('latestPosts'));
     }
+
+    public function shop()
+    {
+        return view('client.pages.shop');
+    }
+
+    public function checkout()
+    {
+        return view('client.pages.checkout');
+    }
+
+    public function thank()
+    {
+        return
+            view('client.pages.thank');
+    }
 }

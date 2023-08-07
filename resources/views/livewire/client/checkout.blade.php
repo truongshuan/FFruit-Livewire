@@ -51,6 +51,25 @@
                                             @error('note')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
+                                            <div class="form-check">
+                                                <input wire:model='payment' class="form-check-input" type="radio"
+                                                    name="exampleRadios" id="exampleRadios2" value="cod">
+                                                <label class="form-check-label" for="exampleRadios2">
+                                                    COD
+                                                </label>
+                                            </div>
+                                            <div class="form-check d-flex align-items-center">
+                                                <input name="redirect" wire:model='payment' class="form-check-input"
+                                                    type="radio" name="exampleRadios" id="exampleRadios1" value="vnpay">
+                                                <label class="form-check-label" for="exampleRadios1">
+                                                    <img width="100"
+                                                        src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR-1.png"
+                                                        alt="vnpay">
+                                                </label>
+                                            </div>
+                                            @error('payment')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </form>
                                     </div>
                                 </div>

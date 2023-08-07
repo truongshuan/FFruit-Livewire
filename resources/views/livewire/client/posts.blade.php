@@ -40,7 +40,7 @@
                                 Cũ nhất
                             </label>
                         </div>
-                        <button wire:click="clearSortBy" class="btn btn-warning">Reset</button>
+                        <button wire:click="clearSortBy" class="btn btn-warning">Làm mới</button>
                     </div>
                 </div>
             </div>

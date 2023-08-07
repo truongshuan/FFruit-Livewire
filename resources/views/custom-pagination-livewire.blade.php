@@ -2,9 +2,9 @@
 <div class="pagination-wrap">
     <ul>
         @if ($paginator->onFirstPage())
-        <li><a href="javascript:;" class="" wire:click="previousPage">Prev</a></li>
+        <li><a href="javascript:;" class="" wire:click="previousPage">Lùi</a></li>
         @else
-        <li><a href="javascript:;" class="disable" wire:click="previousPage">Prev</a></li>
+        <li><a href="javascript:;" class="disable" wire:click="previousPage">Lùi</a></li>
         @endif
         @foreach ($elements as $element)
         @if (is_string($element))
@@ -24,7 +24,7 @@
         @endif
         @endforeach
         @if ($paginator->hasMorePages())
-        <li><a href="javascript:;" wire:click="nextPage">Next</a></li>
+        <li><a href="javascript:;" wire:click="nextPage">Kế tiếp</a></li>
         @else
         <li><a href="javascript:;" class="disable">Next</a></li>
         @endif
