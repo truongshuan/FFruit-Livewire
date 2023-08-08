@@ -102,7 +102,12 @@ class EditTopic extends Component
 
         $validateData['slug'] = $this->slug;
         Topic::find($this->topic_id)->update($validateData);
-        $this->dispatchBrowserEvent('edited');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Sửa thành công!');
     }
 
     /**

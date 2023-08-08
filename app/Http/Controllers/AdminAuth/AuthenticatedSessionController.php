@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminAuth;
 
+use App\Events\MemberStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminAuth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -27,6 +28,8 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        event(new MemberStatus(auth('admin')->user(), 'online'));
+
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::ADMIN_DASHBOARD);
@@ -37,6 +40,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // event(new MemberStatus(auth('admin')->user(), 'offline'));
+
         Auth::guard('admin')->logout();
 
         $request->session()->invalidate();

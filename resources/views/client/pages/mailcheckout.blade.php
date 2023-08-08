@@ -351,6 +351,7 @@
             }
         }
     </style>
+    @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
 <body>
@@ -361,7 +362,7 @@
                 <div class="header">
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td class="align-center" width="100%">
+                            <td class="grid place-items-center" width="100%">
                                 <a href="{{ config('app.url') }}"><img
                                         src="{{ asset('assets/client/img/pngwing.com.png') }}" width="60"
                                         alt="FFruit"></a>
@@ -380,33 +381,88 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <td>
-                                            <h2>👋&nbsp; Cảm ơn bạn vì đã đặt hàng! . - {{$order['customer_name']}}</h2>
+                                            <h2 class="text-center mb-3 text">👋&nbsp; Cảm ơn bạn vì đã đặt hàng -
+                                                {{$order['customer_name']}}</h2>
                                             <p>✨&nbsp; FFruit rất biết ơn những khách hàng đã đặt niềm tin nơi chúng
                                                 tôi, để chúng tôi có động lực cải thiện mỗi ngày.</p>
-                                            <p>⬇️&nbsp; Thông tin đơn hàng:
-                                            <ul>Trạng thái:
+                                            <p class="mt-3 mb-4">⬇️&nbsp; Thông tin đơn hàng:
                                                 @switch($order['status'])
                                                 @case('0')
+                                            <ul class="font-bold text-gray-600">Trạng thái:
                                                 Đang chờ
-                                                @break
-                                                @case('1')
-                                                Thanh toán - {{ $payment_method}}
-                                                @break
-                                                @case('2')
-                                                Hoàn thành
-                                                @break
-                                                @case('3')
-                                                Đã hủy
-                                                @break
-                                                @default
-                                                Đang chờ
-                                                @endswitch
                                             </ul>
-                                            <ul>Số điện thoại:{{$order['customer_phone']}}</ul>
-                                            <ul>Địa chỉ: {{$order['shipping_address']}}</ul>
-                                            <ul>Ghi chú: {{$order['note']}}</ul>
+                                            @break
+                                            @case('1')
+                                            <ul class="text-green-700">Thanh toán - {{ $payment_method}}</ul>
+                                            @break
+                                            @case('2')
+                                            <ul class="text-blue-600">Hoàn thành</ul>
+                                            @break
+                                            @case('3')
+                                            <ul class="text-red-500">Đã hủy</ul>
+                                            @break
+                                            @default
+                                            <ul class="text-gray-600">Đang chờ</ul>
+                                            @endswitch
+                                            <ul>
+                                                <p class="font-bold">Số điện thoại:</p>
+                                                {{$order['customer_phone']}}
+                                            </ul>
+                                            <ul>
+                                                <p class="font-bold">Địa chỉ:</p>
+                                                {{$order['shipping_address']}}
+                                            </ul>
+                                            <ul>
+                                                <p class="font-bold">Ghi chú:</p>
+                                                {{$order['note']}}
+                                            </ul>
                                             </p>
-                                            <table>
+                                            <div class="relative overflow-x-auto mt-4 block">
+                                                <table
+                                                    class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                                    <thead
+                                                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                        <tr class="p-2">
+                                                            <td>#</td>
+                                                            <td>Hình ảnh</td>
+                                                            <td>Tên</td>
+                                                            <td>Số lượng</td>
+                                                            <td>Đơn giá</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($orderDetail as $item)
+                                                        <tr>
+                                                            <th>{{ $item->products->slug }}</th>
+                                                            <th><img src="{{ Storage::disk('s3')->url($item->products->path_image) }}"
+                                                                    alt="{{ $item->products->slug}}" width="100"></th>
+                                                            <th>{{ $item->products->name }}</th>
+                                                            <th>{{ $item->quantity }}</th>
+                                                            <th>
+                                                                @if ($item->products->sale_price > 0)
+                                                                <p>{{ number_format($item->products->sale_price, 0, ',',
+                                                                    '.') . ' VND'
+                                                                    }}</p>
+                                                                @else
+                                                                <p class="h5">{{ number_format($item->products->price,
+                                                                    0,
+                                                                    ',', '.') .
+                                                                    ' VND' }}</p>
+                                                                @endif
+                                                            </th>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <span class="mt-3 text-end">
+                                                <h3 class="text-lg text-orange-500 font-bold">Tổng tiền: {{
+                                                    number_format($order['total_price'],
+                                                    0,
+                                                    ',', '.') .
+                                                    ' VND' }}</h3>
+                                            </span>
+                                            {{-- <table cellpadding="0" cellspacing="0" class="mt-3">
                                                 <tbody>
                                                     <tr>
                                                         <td>#</td>
@@ -437,7 +493,7 @@
                                                     @endforeach
                                                 </tbody>
                                             </table>
-                                            <p></p>
+                                            <p></p> --}}
                                         </td>
                                     </tr>
                                 </table>

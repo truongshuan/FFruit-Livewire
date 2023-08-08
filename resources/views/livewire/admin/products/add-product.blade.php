@@ -94,16 +94,3 @@
             </div>
     </section>
 </main><!-- End #main -->
-@push('scripts')
-<script>
-    window.addEventListener('added', event => {
-              Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Thêm dữ liệu thành công',
-                showConfirmButton: false,
-                timer: 1000
-              })
-     });
-</script>
-@endpush

@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Posts;
 
+use App\Http\Helpers\S3;
 use App\Http\Requests\PostRequest;
 use App\Http\Traits\SlugTrait;
 use App\Models\Post;
 use App\Models\Topic;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -82,16 +82,16 @@ class AddPost extends Component
 
         // Upload image
         if ($this->thumbnail) {
-            $filename = $validatedData['slug'] . '.' . $this->thumbnail->getClientOriginalExtension();
-            $folder = now()->format('d-m-Y');
-            if (!Storage::disk('posts')->exists($folder)) {
-                Storage::disk('posts')->makeDirectory($folder);
-            }
-            $validatedData['thumbnail'] = $this->thumbnail->storeAs($folder, $filename, 'posts');
+            $validatedData['thumbnail'] = S3::upload($this->thumbnail, $validatedData['slug'], 'posts');
         }
 
         Post::create($validatedData);
-        $this->dispatchBrowserEvent('added');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Thêm thành công!');
         $this->reset();
     }
 

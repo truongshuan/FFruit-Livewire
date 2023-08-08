@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
+use App\Http\Helpers\S3;
 use App\Http\Requests\ProductRequest;
 use App\Http\Traits\SlugTrait;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -78,16 +78,16 @@ class AddProduct extends Component
         $validatedData['slug'] = $this->slug;
         // Upload image
         if ($this->path_image) {
-            $filename = $validatedData['slug'] . '.' . $this->path_image->getClientOriginalExtension();
-            $folder = now()->format('d-m-Y');
-            if (!Storage::disk('products')->exists($folder)) {
-                Storage::disk('products')->makeDirectory($folder);
-            }
-            $validatedData['path_image'] = $this->path_image->storeAs($folder, $filename, 'products');
+            $validatedData['path_image'] =  S3::upload($this->path_image, $validatedData['slug'], 'products');
         }
 
         Product::create($validatedData);
-        $this->dispatchBrowserEvent('added');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Thêm thành công!');
         $this->reset();
     }
 

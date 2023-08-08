@@ -86,7 +86,12 @@ class AddTopic extends Component
 
         $validatedData['slug'] = $this->slug;
         if (Topic::create($validateData)) {
-            $this->dispatchBrowserEvent('added');
+            flash()
+                ->options([
+                    'timeout' => 1500,
+                    'position' => 'top-right',
+                ])
+                ->addSuccess('Thêm thành công!');
             $this->reset();
         }
     }

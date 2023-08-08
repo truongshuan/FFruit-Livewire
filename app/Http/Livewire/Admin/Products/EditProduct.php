@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
+use App\Http\Helpers\S3;
 use App\Http\Requests\ProductRequest;
 use App\Http\Traits\SlugTrait;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -113,19 +113,19 @@ class EditProduct extends Component
         if ($this->new_image === null) {
             $validatedData['path_image'] = $this->path_image;
         } else {
-            Storage::disk('products')->delete($this->path_image);
+            S3::delete($this->path_image);
             // Upload new file
-            $filename = $validatedData['slug'] . '.' . $this->new_image->getClientOriginalExtension();
-            $folder = now()->format('d-m-Y');
-            if (!Storage::disk('products')->exists($folder)) {
-                Storage::disk('products')->makeDirectory($folder);
-            }
-            $validatedData['path_image'] = $this->new_image->storeAs($folder, $filename, 'products');
+            $validatedData['path_image'] = S3::upload($this->new_image, $validatedData['slug'], 'products');
         }
 
         // Update data
         Product::find($this->product_id)->update($validatedData);
-        $this->dispatchBrowserEvent('edited');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Sửa thành công!');
     }
 
     /**

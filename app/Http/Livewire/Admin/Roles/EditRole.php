@@ -56,6 +56,13 @@ class EditRole extends Component
         $role = Role::find($this->role_id);
         $role->name = $validatedData['name'];
         $role->syncPermissions($validatedData['selectedPermissions']);
+
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Sửa thành công!');
         $role->save();
 
         $this->dispatchBrowserEvent('edited');

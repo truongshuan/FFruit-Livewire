@@ -28,13 +28,14 @@ class ThankEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thư cảm ơn đến từ FFruit',
+            subject: 'No-Reply FFruit',
         );
     }
 
     /**
      * Get the message content definition.
      */
+    // Cảm ơn vì đã đặt hàng và thanh toán! 🤗
     public function content(): Content
     {
         return new Content(

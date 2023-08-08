@@ -70,9 +70,7 @@ class EditCategory extends Component
     public function submit()
     {
         $validatedData = $this->validate($this->rules(), (new CategoryRequest('add'))->messages());
-
         $slugExists = Category::where('id', $this->category_id)->first();
-
         if (!$this->slug) {
             $this->slug = $this->generateSlug($this->title);
         } else {
@@ -80,13 +78,16 @@ class EditCategory extends Component
             if ($this->slug !== $slugExists->slug) {
                 if ($this->checkSlug($this->slug, Category::class) === 'error')
                     $this->addError('slug', 'Slug đã tồn tại');
-                return;
             }
         }
-
         $validatedData['slug'] = $this->slug;
         Category::find($this->category_id)->update($validatedData);
-        $this->dispatchBrowserEvent('edited');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Sửa thành công!');
     }
 
     public function render()

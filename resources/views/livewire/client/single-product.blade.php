@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-5">
                 <div class="single-product-img">
-                    <img src="{{ Storage::disk('products')->url($product->path_image) }}" alt="{{$product->name}}">
+                    <img src="{{ Storage::disk('s3')->url($product->path_image) }}" alt="{{$product->name}}">
                 </div>
             </div>
             <div class="col-md-7">

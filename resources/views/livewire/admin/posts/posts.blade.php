@@ -96,7 +96,7 @@
                                         <td>{{ $post->title }}</td>
                                         <td>{{ $post->topic->title }}</td>
                                         <td>
-                                            <img src="{{ Storage::disk('posts')->url($post->thumbnail) }}" width="120px"
+                                            <img src="{{ Storage::disk('s3')->url($post->thumbnail) }}" width="120px"
                                                 alt="{{ $post->title }}">
                                         </td>
                                         <td>

@@ -46,6 +46,9 @@
                                         <a href="{{ route('profile.edit') }}">{{ __('Thông tin') }}</a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('myorder') }}">{{ __('Đơn hàng') }}</a>
+                                    </li>
+                                    <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button class="logout-btn">{{ __('Đăng xuất') }}</button>

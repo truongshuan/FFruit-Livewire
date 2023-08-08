@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Posts;
 
+use App\Http\Helpers\S3;
 use App\Http\Requests\PostRequest;
 use App\Http\Traits\SlugTrait;
 use App\Models\Post;
@@ -106,18 +107,18 @@ class EditPost extends Component
         if ($this->new_thumbnail === null) {
             $validatedData['thumbnail'] = $this->thumbnail;
         } else {
-            Storage::disk('posts')->delete($this->thumbnail);
+            Storage::disk('s3')->delete($this->thumbnail);
             // Upload new file
-            $filename = $validatedData['slug'] . '.' . $this->new_thumbnail->getClientOriginalExtension();
-            $folder = now()->format('d-m-Y');
-            if (!Storage::disk('posts')->exists($folder)) {
-                Storage::disk('posts')->makeDirectory($folder);
-            }
-            $validatedData['thumbnail'] = $this->new_thumbnail->storeAs($folder, $filename, 'posts');
+            $validatedData['thumbnail'] = S3::upload($this->new_thumbnail, $validatedData['slug'], 'posts');
         }
 
         if (Post::find($this->post_id)->update($validatedData)) {
-            $this->dispatchBrowserEvent('edited');
+            flash()
+                ->options([
+                    'timeout' => 1500,
+                    'position' => 'top-right',
+                ])
+                ->addSuccess('Chỉnh sửa thành công!');
         }
     }
     /**

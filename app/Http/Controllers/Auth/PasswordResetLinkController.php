@@ -41,7 +41,7 @@ class PasswordResetLinkController extends Controller
 
         return $status == Password::RESET_LINK_SENT
             // ? back()->with('status', __($status))
-            ? back()->with('status', __('Email đã được gửi đến email của bạn'))
+            ? back()->with('status', __('Mail đã được gửi đến email của bạn'))
             : back()->withInput($request->only('email'))
             // ->withErrors(['email' => __($status)]);
             ->withErrors(['email' => 'Email này không tồn tại']);

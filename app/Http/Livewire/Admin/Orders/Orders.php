@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\Admin\Orders;
 
 use App\Exports\OrderExport;
+use App\Mail\ThankEmail;
 use App\Models\Order;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -72,6 +74,22 @@ class Orders extends Component
     {
         $this->resetPage();
     }
+
+    public function updateStatus($status, $id)
+    {
+        $order = Order::find($id);
+        $order->update(['status' => (string) $status]);
+        $message = match ($status) {
+            4 => 'Đơn hàng của bạn đã được xác nhận. 🤗',
+            1 => 'Đơn hàng của bạn đã được thanh toán. 🤗',
+            3 => 'Đơn hàng của bạn đã bị hủy.',
+            2 => 'Đơn hàng của bạn đã hoàn thành. 🤗',
+            default => '',
+        };
+        Mail::to($order->customer_email)->send(new ThankEmail('Thông báo về đơn hàng!', $message));
+        flash()->addSuccess('Cập nhật thành công');
+    }
+
 
     /**
      * Function export data file excel

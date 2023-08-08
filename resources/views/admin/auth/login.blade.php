@@ -34,23 +34,20 @@
 
         <!-- Remember Me -->
         <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox"
-                    class="rounded border-gray-300 text-[#f28123] shadow-sm focus:ring-[#f28123]" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Ghi nhớ tài khoản') }}</span>
-            </label>
-            <br>
             <div class="flex items-center justify-between">
-                @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f28123]"
-                    href="{{ route('password.request') }}">
-                    {{ __('Quên mật khẩu?') }}
-                </a>
-                @endif
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f28123]"
-                    href="{{ route('register') }}">
-                    {{ __('Bạn chưa có tài khoản?') }}
-                </a>
+                <label for="remember_me" class="inline-flex items-center">
+                    <input id="remember_me" type="checkbox"
+                        class="rounded border-gray-300 text-[#f28123] shadow-sm focus:ring-[#f28123]" name="remember">
+                    <span class="ml-2 text-sm text-gray-600">{{ __('Ghi nhớ tài khoản') }}</span>
+                </label>
+                <div class="flex items-center justify-between">
+                    @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f28123]"
+                        href="{{ route('password.request') }}">
+                        {{ __('Quên mật khẩu?') }}
+                    </a>
+                    @endif
+                </div>
             </div>
         </div>
         <div class="flex items-center justify-end mt-4">

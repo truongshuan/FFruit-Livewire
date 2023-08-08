@@ -3,7 +3,6 @@
 namespace App\Http\Helpers;
 
 
-
 class VnPay
 {
     public static function vnpay($action, $order_code, $total)
@@ -21,7 +20,7 @@ class VnPay
         $vnp_OrderType = 'billpayment';
         $vnp_Amount = $total * 100;
         $vnp_Locale = 'vn';
-        $vnp_BankCode = 'NCB';
+        $vnp_BankCode = '';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         //Add Params of 2.0.1 Version
         //Billing

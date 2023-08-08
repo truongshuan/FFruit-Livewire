@@ -2,10 +2,11 @@
 <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link " href="/dashboard">
+            <a class="nav-link " href="{{ route('admin.dashboard') }}">
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
+        @if(Auth::guard('admin')->user()->hasRole('SuperAdmin'))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                 <span>Danh mục sản phẩm</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -40,6 +41,8 @@
                 </li>
             </ul>
         </li><!-- End Components Nav -->
+        @endif
+        @if (Auth::guard('admin')->user()->can('role-manage'))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#role-nav" data-bs-toggle="collapse" href="#">
                 <span>Quyền & Vai trò</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -69,6 +72,8 @@
                 </li>
             </ul>
         </li><!-- End Components Nav -->
+        @endif
+        @if(Auth::guard('admin')->user()->can('post-manage'))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#topic-nav" data-bs-toggle="collapse" href="#">
                 <span>Chủ đề bài viết</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -103,6 +108,8 @@
                 </li>
             </ul>
         </li><!-- End Components Nav -->
+        @endif
+        @if(Auth::guard('admin')->user()->hasRole('SuperAdmin'))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#order" data-bs-toggle="collapse" href="#">
                 <span>Đơn hàng</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -145,6 +152,7 @@
         <li class="nav-item">
             <livewire:admin.toggle-button-log />
         </li><!-- End Charts Nav -->
+        @endif
         {{-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>

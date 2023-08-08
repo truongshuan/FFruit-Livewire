@@ -4,8 +4,7 @@
         <div class="single-product-item">
             <div class="product-image">
                 <a href="{{ route('detail', ['slug'=> $product->slug]) }}">
-                    <img src="{{ Storage::disk('products')->url($product->path_image) }}"
-                        alt="{{ $product->slug}}" /></a>
+                    <img src="{{ Storage::disk('s3')->url($product->path_image) }}" alt="{{ $product->slug}}" /></a>
             </div>
             <h3>{{ $product->name}}</h3>
             <p class="product-price"><span>{{$product->category->title}}</span></p>

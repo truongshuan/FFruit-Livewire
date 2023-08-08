@@ -56,6 +56,8 @@
                                         </th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Vai trò</th>
+                                        <th scope="col">Trạng thái</th>
+                                        <th scope="col">Truy cập</th>
                                         <th scope="col">Ngày đăng ký
                                             <a href="#" wire:click="sortBy('created_at')">
                                                 <i
@@ -89,6 +91,23 @@
                                             <p>{{ $v }}</p>
                                             @endforeach
                                             @endif
+                                        </td>
+                                        <td>
+                                            {{--
+                                        <td>
+                                            <span id="status-badge-{{ $customer->id }}">
+                                            </span>
+                                        </td> --}}
+                                        @if ($customer->lastseen_at >= now()->subMinutes(1))
+                                        <span class="badge rounded-pill bg-success">Online</span>
+                                        @else
+                                        <span class="badge rounded-pill bg-dark">Offline</span>
+                                        @endif
+                                        </td>
+                                        <td>
+                                            {{
+                                            \Carbon\Carbon::parse($customer->lastseen_at)->locale('vi_VN')->diffForHumans()
+                                            }}
                                         </td>
                                         <td>
                                             {{ $customer->created_at->format('d/m/Y') }}

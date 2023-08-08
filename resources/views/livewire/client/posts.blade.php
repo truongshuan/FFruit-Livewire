@@ -67,7 +67,7 @@
             <div class="single-latest-news">
                 <a href="{{ route('new_detail', ['slug'=> $post->slug]) }}">
                     <div class="latest-news-bg"
-                        style="background-image: url({{ Storage::disk('posts')->url($post->thumbnail) }})"></div>
+                        style="background-image: url({{ Storage::disk('s3')->url($post->thumbnail) }})"></div>
                 </a>
                 <div class="news-text-box">
                     <h3><a href="{{ route('new_detail', ['slug'=> $post->slug]) }}">

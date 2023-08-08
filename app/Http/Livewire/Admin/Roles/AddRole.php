@@ -37,7 +37,12 @@ class AddRole extends Component
         $role = Role::create(['name' => $validatedData['name'], 'guard_name' => 'admin']);
         $role->syncPermissions($validatedData['selectedPermissions']);
 
-        $this->dispatchBrowserEvent('added');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Thêm thành công!');
         $this->reset();
     }
 

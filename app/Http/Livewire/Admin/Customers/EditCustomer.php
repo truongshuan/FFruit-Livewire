@@ -39,7 +39,12 @@ class EditCustomer extends Component
         $customer = Admin::find($this->customer_id);
         DB::table('model_has_roles')->where('model_id', $this->customer_id)->delete();
         $customer->assignRole($this->role);
-        $this->dispatchBrowserEvent('edited');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Phân quyền thành công');
     }
 
 

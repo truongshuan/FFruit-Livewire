@@ -41,16 +41,3 @@
         </div>
     </section>
 </main><!-- End #main -->
-@push('scripts')
-<script>
-    window.addEventListener('edited', event => {
-              Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Thêm quyền thành công',
-                showConfirmButton: false,
-                timer: 1000
-              })
-     });
-</script>
-@endpush

@@ -30,7 +30,7 @@
                                         value="{{$product['product']->id}}" id="{{$product['product']->id}}">
                                 </td>
                                 <td class="product-image"><img
-                                        src="{{ Storage::disk('products')->url($product['product']->path_image) }}"
+                                        src="{{ Storage::disk('s3')->url($product['product']->path_image) }}"
                                         alt="{{$product['product']->name}}" width="50px">
                                 </td>
                                 <td class="product-name">{{$product['product']->name}}</td>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Client;
 
+use App\Events\UserRegistration;
 use App\Http\Helpers\VnPay;
 use App\Http\Requests\CheckoutRequest;
 use App\Mail\CheckoutMail;
@@ -44,6 +45,7 @@ class Checkout extends Component
 
         if ($this->payment === 'vnpay') {
             $validateData['status'] = '1';
+            $validateData['payment_method'] = $this->payment;
             DB::beginTransaction();
             try {
                 $order = Order::create($validateData);
@@ -68,6 +70,7 @@ class Checkout extends Component
                 $this->reset();
                 $this->carts = [];
                 $this->emit('refreshCartList');
+                event(new UserRegistration('order'));
             } catch (\Throwable $e) {
                 DB::rollback();
                 flash()
@@ -82,6 +85,7 @@ class Checkout extends Component
             DB::beginTransaction();
             try {
                 $validateData['status'] = '0';
+                $validateData['payment_method'] = $this->payment;
                 $order = Order::create($validateData);
                 foreach ($this->carts as $cart => $item) {
                     $orderDetail = new OrderDetail([
@@ -95,6 +99,7 @@ class Checkout extends Component
                 }
                 // Gui mail
                 Mail::to($validateData['customer_email'])->send(new CheckoutMail($validateData, $order->id, 'COD'));
+                Mail::to($validateData['customer_email'])->send(new ThankEmail('Cảm ơn bạn vì đã thanh toán', 'Hãy đánh giá nếu bạn hài lòng'));
                 // Commit db
                 DB::commit();
                 flash()
@@ -107,6 +112,7 @@ class Checkout extends Component
                 $this->reset();
                 $this->carts = [];
                 $this->emit('refreshCartList');
+                event(new UserRegistration('order'));
             } catch (\Throwable $e) {
                 DB::rollback();
                 flash()

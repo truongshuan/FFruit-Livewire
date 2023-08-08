@@ -134,7 +134,9 @@
                                         <td>{{ number_format($product->price, 0, '.', ',') }} đ</td>
                                         <td>{{ number_format($product->sale_price, 0, '.', ',') }} đ</td>
                                         <td>
-                                            {!! $product->description !!}
+                                            <p class="d-inline-block text-truncate" style="width: 150px">
+                                                {{ $product->description }}
+                                            </p>
                                         </td>
                                         <td>{{ $product->created_at->format('d/m/Y') }}</td>
                                         <td>

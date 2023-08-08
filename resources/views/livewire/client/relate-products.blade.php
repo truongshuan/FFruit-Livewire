@@ -4,7 +4,7 @@
         <div class="single-product-item">
             <div class="product-image">
                 <a href="{{ route('detail', ['slug'=> $item->slug]) }}">
-                    <img loading="lazy" src="{{ Storage::disk('products')->url($item->path_image) }}"
+                    <img loading="lazy" src="{{ Storage::disk('s3')->url($item->path_image) }}"
                         alt="{{ $item->slug}}" />
                 </a>
             </div>

@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/responsive.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/client/css/skeleton.css') }}" />
     @livewireStyles
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>

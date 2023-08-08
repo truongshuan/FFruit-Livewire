@@ -34,4 +34,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::get('checkout', [HomeController::class, 'checkout']);
     Route::get('/thank', [HomeController::class, 'thank'])->name('thank');
+    Route::get('/my-order', function () {
+        return view('client.pages.myorder');
+    })->name('myorder');
+    Route::get('/order-detail/{id?}', [HomeController::class, 'detailOrder'])->name('order.detail');
 });

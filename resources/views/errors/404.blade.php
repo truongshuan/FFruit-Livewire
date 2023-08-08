@@ -1,5 +1,5 @@
 @extends('client.layouts.master')
-@section('title', 'Thank you')
+@section('title', '404')
 @section('content')
 <!-- breadcrumb-section -->
 <div class="breadcrumb-section breadcrumb-bg">

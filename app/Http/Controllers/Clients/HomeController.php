@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Post;
 
 class HomeController extends Controller
@@ -31,5 +33,12 @@ class HomeController extends Controller
     {
         return
             view('client.pages.thank');
+    }
+
+    public function detailOrder(int $id)
+    {
+        $order = Order::where('id', $id)->with('customer')->first();
+        $details = OrderDetail::where('order_id', $id)->with('products')->get();
+        return view('client.pages.detailorder', compact('order', 'details'));
     }
 }

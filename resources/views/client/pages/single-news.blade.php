@@ -26,7 +26,7 @@
                         {{-- <img src="{{ Storage::disk('posts')->url($post->thumbnail) }}" width="120px"
                             alt="{{ $post->title }}"> --}}
                         <div class="single-artcile-bg"
-                            style="background-image: url({{ Storage::disk('posts')->url($post->thumbnail) }}">
+                            style="background-image: url({{ Storage::disk('s3')->url($post->thumbnail) }}">
                         </div>
                         <p class="blog-meta">
                             <span class="author"><i class="fas fa-user"></i> Admin</span>

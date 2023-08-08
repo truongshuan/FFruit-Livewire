@@ -26,6 +26,7 @@ class Order extends Model
         'total_price',
         'status',
         'user_id',
+        'payment_method',
     ];
 
     /**

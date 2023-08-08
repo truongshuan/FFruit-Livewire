@@ -76,7 +76,12 @@ class AddCategory extends Component
 
         $validatedData['slug'] = $this->slug;
         Category::create($validatedData);
-        $this->dispatchBrowserEvent('added');
+        flash()
+            ->options([
+                'timeout' => 1500,
+                'position' => 'top-right',
+            ])
+            ->addSuccess('Thêm thành công!');
         $this->reset();
     }
 }

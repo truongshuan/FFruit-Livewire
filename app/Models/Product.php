@@ -86,7 +86,7 @@ class Product extends Model
     public function getImageUrl(): ?string
     {
         if ($this->path_image) {
-            return Storage::disk('products')->url($this->path_image);
+            return Storage::disk('s3')->url($this->path_image);
         } else {
             return null;
         }
