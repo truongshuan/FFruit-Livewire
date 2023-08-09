@@ -7,7 +7,7 @@
                     <div class="row mb-2">
                         <div class="col-md-6 mb-4 mb-sm-0">
                             <select wire:model='queryByCategory' class="custom-select text-center h6">
-                                <option value="" selected>Chọn danh mục sản phẩm</option>
+                                <option value="" selected>Lọc theo chủ đề</option>
                                 @foreach ($topics as $topic)
                                 <option value="{{$topic->id}}">{{$topic->title}}</option>
                                 @endforeach

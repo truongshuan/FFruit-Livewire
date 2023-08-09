@@ -10,7 +10,6 @@ use Livewire\WithPagination;
 class Posts extends Component
 {
     use WithPagination;
-
     public string $sortBy = '';
     public string $queryByCategory = '';
     public string $searchTerm = '';
