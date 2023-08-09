@@ -80,7 +80,7 @@
                         </thead>
                         <tbody>
                             <tr class="total-data">
-                                <td><strong>Tổng thanh toán: </strong></td>
+                                <td><strong>Tổng: </strong></td>
                                 <td>
                                     @if ($selectedRow)
                                     {{ number_format($totalbill, 0,',','.') . ' VND' }}
@@ -90,12 +90,18 @@
                                 </td>
                             </tr>
                             <tr class="total-data">
-                                <td><strong>Shipping: </strong></td>
-                                <td>$45</td>
+                                <td><strong>Phí vận chuyển: </strong></td>
+                                <td>0 VND</td>
                             </tr>
                             <tr class="total-data">
-                                <td><strong>Total: </strong></td>
-                                <td>$545</td>
+                                <td><strong>Tổng đơn hàng: </strong></td>
+                                <td>
+                                    @if ($selectedRow)
+                                    {{ number_format($totalbill, 0,',','.') . ' VND' }}
+                                    @else
+                                    0 VND
+                                    @endif
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -104,16 +110,15 @@
                         @if($selectedRow)
                         <a wire:click='deleteRow()' class="boxed-btn">Xóa sản phẩm đã chọn</a>
                         @endif
-                        <a wire:click='checkout()' class="boxed-btn black">Đặt hàng</a>
+                        <a wire:click='checkout()' class="boxed-btn black mt-sm-2">Đặt hàng</a>
                     </div>
                 </div>
-
                 <div class="coupon-section">
                     <h3>Áp dụng mã khuyến mãi</h3>
                     <div class="coupon-form-wrap">
                         <form action="index.html">
                             <p><input type="text" placeholder="Coupon"></p>
-                            <p><input type="submit" value="Apply"></p>
+                            <p><input type="submit" value="Áp dụng"></p>
                         </form>
                     </div>
                 </div>

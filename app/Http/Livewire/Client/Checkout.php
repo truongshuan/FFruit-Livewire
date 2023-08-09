@@ -19,11 +19,25 @@ class Checkout extends Component
     public $customer_name, $customer_email, $customer_phone, $shipping_address, $note, $total_price, $status, $user_id, $payment;
     public $carts = [];
     public $total = 0;
+    public $chooseAddress;
 
     public function mount()
     {
         $this->customer_name = Auth::user()->name;
         $this->customer_email = Auth::user()->email;
+        if ($this->chooseAddress == 'new') {
+            $this->shipping_address = '';
+        } else {
+            $this->shipping_address = Auth::user()->address;
+        }
+    }
+    public function updatedChooseAddress($value)
+    {
+        if ($value === 'new') {
+            $this->shipping_address = '';
+        } else {
+            $this->shipping_address = Auth::user()->address;
+        }
     }
 
 

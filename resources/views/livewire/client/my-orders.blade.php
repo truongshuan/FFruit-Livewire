@@ -66,8 +66,7 @@
                                     tiết</a>
                                 <button {{ $order->status == 3 ? 'disabled' : '' }} {{ $order->status == 2 ? 'disabled'
                                     : '' }} wire:click.prevent='deleteConfirm({{
-                                    $order->id }})'
-                                    class="btn-danger btn">Hủy</button>
+                                    $order->id }})' class="btn-danger btn">Hủy</button>
                             </td>
                         </tr>
                         @empty

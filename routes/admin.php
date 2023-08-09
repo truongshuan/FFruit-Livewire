@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\ChartController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Livewire\Admin\Categories\AddCategory;
 use App\Http\Livewire\Admin\Categories\Categories;
 use App\Http\Livewire\Admin\Categories\EditCategory;
@@ -24,9 +26,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.admin')->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('dashboard', function () {
-            return view('admin.pages.index');
-        })->name('admin.dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('charts', [ChartController::class, 'index'])->name('admin.charts');
         Route::group(['middleware' => ['auth:admin', 'role:SuperAdmin']], function () {
             Route::group(['prefix' => 'orders'], function () {
                 Route::get('/', Orders::class)->name('orders');

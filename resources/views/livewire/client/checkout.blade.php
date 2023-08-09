@@ -30,10 +30,26 @@
                                             @error('customer_email')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
+                                            @if (Auth::user()->address === null)
                                             <p>
                                                 <input wire:model='shipping_address' type="text"
                                                     placeholder="Địa chỉ " />
                                             </p>
+                                            @else
+                                            <div class="mb-3">
+                                                <select wire:model.lazy='chooseAddress' class="form-control">
+                                                    <option selected>Chọn địa chỉ</option>
+                                                    <option value="default">{{Auth::user()->address}}</option>
+                                                    <option value="new">Nhập địa chỉ mới</option>
+                                                </select>
+                                            </div>
+                                            @if ($chooseAddress === 'new')
+                                            <p>
+                                                <input wire:model='shipping_address' type="text" placeholder="Địa chỉ "
+                                                    value="" />
+                                            </p>
+                                            @endif
+                                            @endif
                                             @error('shipping_address')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
