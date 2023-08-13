@@ -96,7 +96,6 @@ class EditTopic extends Component
             if ($this->slug !== $slugExists->slug) {
                 if ($this->checkSlug($this->slug, Topic::class) === 'error')
                     $this->addError('slug', 'Slug đã tồn tại');
-                return;
             }
         }
 

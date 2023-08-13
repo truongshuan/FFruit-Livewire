@@ -78,11 +78,11 @@
                                         <th scope="col">Trạng thái<span>
                                         <th scope="col">
                                             Ngày đặt
-                                            <a href="#" class="d-inline-block" wire:click="sortBy('create_at')">
+                                            <a href="#" class="d-inline-block" wire:click="sortBy('created_at')">
                                                 <i
-                                                    class=" {{ $sortColumnName === 'create_at' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
+                                                    class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? 'text-secondary' : 'text-primary' }} bi bi-arrow-up-short "></i>
                                                 <i
-                                                    class=" {{ $sortColumnName === 'create_at' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
+                                                    class=" {{ $sortColumnName === 'created_at' && $sortDirection === 'desc' ? 'text-secondary' : 'text-primary' }}   bi bi-arrow-down-short"></i>
                                             </a>
                                         </th>
                                         <th scope="col">Cập nhật</th>
@@ -90,7 +90,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($orders as $order)
+                                    @foreach ($orders as $order)
                                     <tr>
                                         <th scope="row">
                                             <div class="form-check">
@@ -139,11 +139,12 @@
                                         </td>
                                         <td>
                                             <!-- Button trigger modal -->
-                                            <button data-bs-target="#exampleModal" type="button" class="btn btn-dark"
-                                                data-bs-toggle="modal"><i class="bi bi-folder"></i></button>
-
+                                            <button data-bs-target="#exampleModal-{{ $order->id }}" type="button"
+                                                class="btn btn-dark" data-bs-toggle="modal">
+                                                Sửa
+                                            </button>
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1"
+                                            <div class="modal fade" id="exampleModal-{{ $order->id }}" tabindex="-1"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -188,15 +189,14 @@
                                                 class="btn btn-primary btn-sm">Chi tiết</a>
                                         </td>
                                     </tr>
-                                    @empty
-                                    <tr>
+                                    @endforeach
+                                    {{-- <tr>
                                         <th colspan="11">
                                             <span class="">
                                                 Không tìm thấy đơn hàng !
                                             </span>
                                         </th>
-                                    </tr>
-                                    @endforelse
+                                    </tr> --}}
                                 </tbody>
                             </table>
                         </div>

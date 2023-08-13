@@ -103,7 +103,6 @@ class EditProduct extends Component
             if ($this->slug !== $slugExists->slug) {
                 if ($this->checkSlug($this->slug, Product::class) === 'error') {
                     $this->addError('slug', 'Slug đã tồn tại');
-                    return;
                 }
             }
         }
@@ -119,6 +118,7 @@ class EditProduct extends Component
         }
 
         // Update data
+        dd($validatedData);
         Product::find($this->product_id)->update($validatedData);
         flash()
             ->options([

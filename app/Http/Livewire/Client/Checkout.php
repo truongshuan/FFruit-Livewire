@@ -5,13 +5,11 @@ namespace App\Http\Livewire\Client;
 use App\Events\UserRegistration;
 use App\Http\Helpers\VnPay;
 use App\Http\Requests\CheckoutRequest;
-use App\Mail\CheckoutMail;
-use App\Mail\ThankEmail;
+use App\Jobs\SendMailCheckout;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Checkout extends Component
@@ -74,8 +72,7 @@ class Checkout extends Component
                     $this->removeItemFromCart($item['product']['id']);
                 }
                 // Gui mail
-                Mail::to($validateData['customer_email'])->send(new CheckoutMail($validateData, $order->id, 'VNPAY'));
-                Mail::to($validateData['customer_email'])->send(new ThankEmail('Cảm ơn bạn vì đã thanh toán', 'Hãy đánh giá nếu bạn hài lòng'));
+                SendMailCheckout::dispatch($validateData['customer_email'], $validateData, $order->id, 'VNPAY')->onQueue('emails');
                 // Commit db
                 DB::commit();
                 // Payment
@@ -111,10 +108,8 @@ class Checkout extends Component
                     $order->orderDetail()->save($orderDetail);
                     $this->removeItemFromCart($item['product']['id']);
                 }
-                // Gui mail
-                Mail::to($validateData['customer_email'])->send(new CheckoutMail($validateData, $order->id, 'COD'));
-                Mail::to($validateData['customer_email'])->send(new ThankEmail('Cảm ơn bạn vì đã thanh toán', 'Hãy đánh giá nếu bạn hài lòng'));
                 // Commit db
+                SendMailCheckout::dispatch($validateData['customer_email'], $validateData, $order->id, 'COD')->onQueue('emails');
                 DB::commit();
                 flash()
                     ->options([

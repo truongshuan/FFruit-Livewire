@@ -3,11 +3,10 @@
 namespace App\Http\Livewire\Admin\Orders;
 
 use App\Exports\OrderExport;
-use App\Mail\ThankEmail;
+use App\Jobs\SendMailThank;
 use App\Models\Order;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -86,7 +85,7 @@ class Orders extends Component
             2 => 'Đơn hàng của bạn đã hoàn thành. 🤗',
             default => '',
         };
-        Mail::to($order->customer_email)->send(new ThankEmail('Thông báo về đơn hàng!', $message));
+        SendMailThank::dispatch($order->customer_email, $message)->onQueue('emails');
         flash()->addSuccess('Cập nhật thành công');
     }
 
@@ -95,7 +94,7 @@ class Orders extends Component
      * Function export data file excel
      * @return Response|BinaryFileResponse [type]
      */
-    public function export(): \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function export(): Response|BinaryFileResponse
     {
         return (new OrderExport($this->selectedRow))->download('Orders.xlsx');
     }

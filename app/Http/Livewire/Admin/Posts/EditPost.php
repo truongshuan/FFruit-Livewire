@@ -98,7 +98,6 @@ class EditPost extends Component
             if ($this->slug !== $slugExists->slug) {
                 if ($this->checkSlug($this->slug, Post::class) === 'error') {
                     $this->addError('slug', 'Slug đã tồn tại');
-                    return;
                 }
             }
         }
@@ -112,6 +111,7 @@ class EditPost extends Component
             $validatedData['thumbnail'] = S3::upload($this->new_thumbnail, $validatedData['slug'], 'posts');
         }
 
+        $validatedData['topic_id'] = $this->topic_id;
         if (Post::find($this->post_id)->update($validatedData)) {
             flash()
                 ->options([
